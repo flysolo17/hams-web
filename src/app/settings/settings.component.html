@@ -1,0 +1,146 @@
+<main>
+  <p class="h2">Profile Settings</p>
+  <div class="profile-card">
+    <img
+      [src]="user$?.profile"
+      alt="placeholder image"
+      class="img-fluid"
+      style="width: 180px; border-radius: 10px; height: 180px"
+    />
+    <div class="info-container">
+      <h4>{{ user$?.name ?? "no user" }}</h4>
+      <p class="text-subtitle">{{ user$?.type ?? "no user" }}</p>
+      <p class="text-subtitle">
+        <b>Email:</b><br />{{ user$?.email ?? "user not found!" }}
+      </p>
+      <div class="actions">
+        <button class="btn btn-outline-success" (click)="editProfile.show()">
+          Edit Profile
+        </button>
+        <button class="btn btn-danger" (click)="changePassword.show()">
+          Change Password
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
+<!-- edit profile modal -->
+<div
+  class="modal fade"
+  id="editProfile"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Profile</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; gap: 1rem; align-items: end" class="mb-3">
+          <img
+            [src]="user$?.profile"
+            alt="Generic placeholder image"
+            class="img-fluid"
+            style="width: 150px; border-radius: 10px; height: 150px"
+          />
+          <input
+            type="file"
+            accept="image/*"
+            class="form-control"
+            (change)="onSelectImage($event)"
+            id="inputGroupFile04"
+            aria-describedby="inputGroupFileAddon04"
+            aria-label="Upload"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="recipient-name" class="col-form-label">Name:</label>
+          <input type="text" #name [value]="user$?.name" class="form-control" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          (click)="saveProfile(name.value)"
+        >
+          Save Profile
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- change Password modal -->
+<div class="modal fade" id="changePassword" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Change Password</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="inputPassword5" class="form-label"
+              >Current Password</label
+            >
+            <input
+              type="password"
+              id="inputPassword5"
+              class="form-control"
+              aria-labelledby="passwordHelpBlock"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="inputPassword5" class="form-label">New Password</label>
+            <input
+              type="password"
+              id="inputPassword5"
+              class="form-control"
+              aria-labelledby="passwordHelpBlock"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="inputPassword5" class="form-label"
+              >Re-enter Password</label
+            >
+            <input
+              type="password"
+              id="inputPassword5"
+              class="form-control"
+              aria-labelledby="passwordHelpBlock"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-danger" (click)="updatePassword()">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

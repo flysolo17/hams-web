@@ -1,0 +1,96 @@
+<main>
+  <button
+    type="button"
+    class="btn btn-success btn-create"
+    (click)="openModal()"
+  >
+    Create Class
+  </button>
+  <div class="container">
+    <div class="row row-cols-3">
+      <div class="col" *ngFor="let class of classes$ | async">
+        <div class="classes-container" (click)="viewSubject(class)">
+          <h2>{{ class.name }}</h2>
+          <p class="subtitle">{{ class.educationLevel }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- create class modal -->
+<div class="modal fade" id="createClassDialog" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="createClassModal">Create Class</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="classesForm" (submit)="saveClass()">
+          <div class="mb-3">
+            <label class="mb-2">Class name</label>
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="name"
+                placeholder="ex. 1st Year"
+              />
+            </div>
+            <div *ngIf="classesForm.get('name')?.touched">
+              <div
+                class="form-text text-danger"
+                *ngIf="classesForm.get('name')?.value?.length == 0"
+              >
+                *Please add name
+              </div>
+              <div
+                class="form-text text-danger"
+                *ngIf="classesForm.get('name')?.hasError('pattern')"
+              >
+                *Please no special characters
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="disabledSelect" class="form-label"
+              >Education Level</label
+            >
+            <select class="form-select" formControlName="type">
+              <option value="PRIMARY" selected>PRIMARY</option>
+              <option value="JUNIOR HIGH SCHOOL">JUNIOR HIGH SCHOOL</option>
+              <option value="SENIOR HIGH SCHOOL">SENIOR HIGH SCHOOL</option>
+            </select>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn btn-success"
+              [disabled]="
+                classesForm.invalid ||
+                +classesForm.get('schoolYearFrom')?.value! >
+                  +classesForm.get('schoolYearTo')?.value!
+              "
+            >
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

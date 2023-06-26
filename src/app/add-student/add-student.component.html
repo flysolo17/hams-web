@@ -1,0 +1,252 @@
+<!-- As a heading -->
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <button class="btn" (click)="back()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        class="bi bi-arrow-left"
+        viewBox="0 0 16 16"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
+        />
+      </svg>
+    </button>
+    <span class="navbar-brand mb-0 h1">ADD NEW STUDENT</span>
+  </div>
+</nav>
+<main>
+  <form [formGroup]="studentForm" (submit)="saveStudent()">
+    <h1>Student Info</h1>
+    <div class="form-floating mb-3">
+      <input
+        class="form-control"
+        type="number"
+        placeholder="lrn"
+        required
+        formControlName="lrn"
+      />
+      <label for="firstname">Lrn</label>
+    </div>
+    <div class="row g-2 mb-3">
+      <div class="col-md">
+        <div class="input-group has-validation">
+          <div class="form-floating">
+            <input
+              type="text"
+              class="form-control"
+              id="firstname"
+              formControlName="firstName"
+              placeholder="firstname"
+              required
+              [ngClass]="{
+                'is-invalid':
+                  'submitted' &&
+                  studentForm.controls.firstName.errors &&
+                  studentForm.controls.firstName.touched
+              }"
+            />
+            <label for="firstname">Firstname</label>
+            <div
+              class="invalid-feedback"
+              *ngIf="studentForm.controls.firstName.value === ''"
+            >
+              Invalid firstname.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="input-group has-validation">
+          <div class="form-floating">
+            <input
+              type="text"
+              class="form-control"
+              id="middlename"
+              formControlName="middleName"
+              placeholder="middlename"
+              required
+              [ngClass]="{
+                'is-invalid':
+                  'submitted' &&
+                  studentForm.controls.middleName.errors &&
+                  studentForm.controls.middleName.touched
+              }"
+            />
+            <label for="middlename">Middlename</label>
+            <div
+              class="invalid-feedback"
+              *ngIf="studentForm.controls.middleName.value === ''"
+            >
+              Invalid middlename.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="col-md">
+          <div class="input-group has-validation">
+            <div class="form-floating">
+              <input
+                type="text"
+                class="form-control"
+                id="lastname"
+                formControlName="lastName"
+                placeholder="lastname"
+                required
+                [ngClass]="{
+                  'is-invalid':
+                    'submitted' &&
+                    studentForm.controls.lastName.errors &&
+                    studentForm.controls.lastName.touched
+                }"
+              />
+              <label for="lastname">Lastname</label>
+              <div
+                class="invalid-feedback"
+                *ngIf="studentForm.controls.lastName.value === ''"
+              >
+                Invalid lastname.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-2 mb-3">
+      <div class="col-md">
+        <div class="form-floating">
+          <input
+            type="date"
+            class="form-control"
+            id="dob"
+            formControlName="dob"
+          />
+          <label for="dob">Date of Birth</label>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="form-floating">
+          <select
+            class="form-select"
+            id="floatingSelectGrid"
+            formControlName="gender"
+          >
+            <option selected value="MALE">Male</option>
+            <option value="FEMALE">Female</option>
+          </select>
+          <label for="floatingSelectGrid">Please select gender</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-group has-validation mb-3">
+      <div class="form-floating">
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          formControlName="email"
+          placeholder="email"
+          required
+          [ngClass]="{
+            'is-invalid':
+              'submitted' &&
+              studentForm.controls.email.errors &&
+              studentForm.controls.email.touched
+          }"
+        />
+        <label for="email">Email</label>
+        <div class="invalid-feedback" *ngIf="studentForm.controls.email.errors">
+          Invalid email.
+        </div>
+      </div>
+    </div>
+    <!-- emergency contact -->
+    <h1>Emergency Contact</h1>
+
+    <div class="row g-2 mb-3">
+      <div class="col-md">
+        <div class="input-group has-validation">
+          <div class="form-floating">
+            <input
+              type="text"
+              class="form-control"
+              id="fullname"
+              formControlName="emergencyName"
+              placeholder="fullname"
+              required
+              [ngClass]="{
+                'is-invalid':
+                  'submitted' &&
+                  studentForm.controls.emergencyName.errors &&
+                  studentForm.controls.emergencyName.touched
+              }"
+            />
+            <label for="fullname">Fullname</label>
+            <div
+              class="invalid-feedback"
+              *ngIf="studentForm.controls.emergencyName.value === ''"
+            >
+              Invalid Fullname.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="input-group has-validation">
+          <div class="form-floating">
+            <input
+              type="phone"
+              class="form-control"
+              id="phone"
+              formControlName="phone"
+              placeholder="phone"
+              required
+              [ngClass]="{
+                'is-invalid':
+                  'submitted' &&
+                  studentForm.controls.phone.errors &&
+                  studentForm.controls.phone.touched
+              }"
+            />
+            <label for="phone">Phone</label>
+            <div
+              class="invalid-feedback"
+              *ngIf="studentForm.controls.phone.value === ''"
+            >
+              Invalid phone.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="col-md">
+          <div class="form-floating">
+            <select
+              class="form-select"
+              id="floatingSelectGrid"
+              formControlName="type"
+            >
+              <option selected value="PARENT">Parent</option>
+              <option value="GUARDIAN">Guardian</option>
+            </select>
+            <label for="floatingSelectGrid">Please select contact type</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      class="btn btn-success"
+      type="submit"
+      [disabled]="studentForm.invalid"
+    >
+      Save Student
+    </button>
+  </form>
+</main>

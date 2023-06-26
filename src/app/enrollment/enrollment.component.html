@@ -1,0 +1,58 @@
+<main>
+  <div class="box-container">
+    <div class="box box-1" style="border-left: 5px solid yellow">
+      <h1>Requests</h1>
+      <p class="h4">{{ getRequest().length }}</p>
+    </div>
+    <div class="box box-2" style="border-left: 5px solid green">
+      <h1>Accepted</h1>
+      <p class="h4">{{ getAccepted().length }}</p>
+    </div>
+    <div class="box box-3" style="border-left: 5px solid red">
+      <h1>Rejected</h1>
+      <p class="h4">{{ getRejected().length }}</p>
+    </div>
+  </div>
+  <h4>Enrollments</h4>
+  <table class="table table-lg">
+    <thead class="table-dark">
+      <tr>
+        <th scope="col">Student ID</th>
+        <th
+          scope="col
+        "
+        >
+          Fullname
+        </th>
+        <th scope="col">Academics</th>
+        <th scope="col">Status</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      <tr *ngFor="let student of students$">
+        <td>{{ student.id }}</td>
+        <td>
+          {{
+            student.studentInfo.lastname +
+              " " +
+              student.studentInfo.firstName +
+              " " +
+              student.studentInfo.middleName
+          }}
+        </td>
+        <td>{{ student.academics.length }}</td>
+        <td>{{ student.status }}</td>
+        <td>
+          <button
+            class="btn btn-outline-success btn-sm me-3"
+            *ngIf="getEnrollmentRequestPerStudent(student).length != 0"
+            (click)="navigate(student)"
+          >
+            View Request
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</main>

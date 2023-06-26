@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col">
+    <div class="card mb-4 mb-md-0">
+      <div class="card-body">
+        <p class="mb-4">
+          <span class="text-danger font-italic me-1">Enrollment Request</span>
+        </p>
+        <h5 class="my-3">
+          {{ classes$["name"] }}
+        </h5>
+        <p class="text-muted mb-1">
+          School Year : {{ classes$["schoolYear"] }}
+        </p>
+        <p class="text-muted mb-1">{{ getSemester(academic?.sem!) }}</p>
+
+        <div class="d-flex justify-content-center mb-2">
+          <button type="button" class="btn btn-danger" (click)="reject()">
+            Reject
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-success ms-1"
+            (click)="accept()"
+          >
+            Accept
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

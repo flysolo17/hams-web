@@ -1,0 +1,10 @@
+section {
+  height: 100vh;
+  overflow: auto;
+}
+.info {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  min-width: 60%;
+}
