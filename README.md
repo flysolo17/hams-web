@@ -4,6 +4,6 @@
 - step 3 : install the dependencies by pasting this command "npm install" if there's an error chat me
 - optional : open project on vs code by pasting this command "code ."
 - step 4 : run the project by pasting this command "ng serve" 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+
 
 
