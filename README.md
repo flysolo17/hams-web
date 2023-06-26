@@ -6,9 +6,9 @@
 - step 4 : run the project by pasting this command "ng serve"
 
 #Requirements
-  - You must have vs code installed on your computer
-  - You must have Node JS installed on your computer
-  - You must have Git code installed on your computer
+  - You must have VISUAL STUDIO CODE installed on your computer
+  - You must have NODE JS installed on your computer
+  - You must have GIT installed on your computer
 
 
 
