@@ -8,6 +8,7 @@ import {
   orderBy,
   query,
   setDoc,
+  updateDoc,
 } from '@angular/fire/firestore';
 import { Subjects } from '../models/Subjects';
 import { SUBJECT_TABLE } from '../utils/Constants';
@@ -28,5 +29,13 @@ export class SubjectService {
   }
   deleteSubject(id: string) {
     return deleteDoc(doc(this.REF, id));
+  }
+  updateSubject(subject: Subjects) {
+    return updateDoc(doc(this.REF, subject.id), {
+      name: subject.name,
+      code: subject.code,
+      units: subject.units,
+      teacherID: subject.teacherID,
+    });
   }
 }

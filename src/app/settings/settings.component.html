@@ -97,7 +97,7 @@
         ></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form [formGroup]="passwordForm" (ngSubmit)="validatePassword()">
           <div class="mb-3">
             <label for="inputPassword5" class="form-label"
               >Current Password</label
@@ -105,41 +105,66 @@
             <input
               type="password"
               id="inputPassword5"
+              formControlName="currentPassword"
               class="form-control"
               aria-labelledby="passwordHelpBlock"
             />
           </div>
 
           <div class="mb-3">
-            <label for="inputPassword5" class="form-label">New Password</label>
+            <label for="inputPassword6" class="form-label">New Password</label>
             <input
               type="password"
-              id="inputPassword5"
+              id="inputPassword6"
               class="form-control"
+              formControlName="newPassword"
               aria-labelledby="passwordHelpBlock"
+              [ngClass]="{
+                'is-invalid':
+                  'submitted' &&
+                  passwordForm.controls['newPassword'].errors &&
+                  passwordForm.controls['newPassword'].touched
+              }"
             />
+            <div class="invalid-feedback">Invalid Password</div>
           </div>
 
           <div class="mb-3">
-            <label for="inputPassword5" class="form-label"
+            <label for="inputPassword7" class="form-label"
               >Re-enter Password</label
             >
             <input
               type="password"
-              id="inputPassword5"
+              id="inputPassword7"
               class="form-control"
+              formControlName="confirmPassword"
               aria-labelledby="passwordHelpBlock"
+              [ngClass]="{
+                'is-invalid':
+                  'submitted' &&
+                  passwordForm.controls['confirmPassword'].touched &&
+                  passwordForm.controls['confirmPassword'].errors
+              }"
             />
+            <div class="invalid-feedback">Password not match.</div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn btn-danger"
+              [disabled]="passwordForm.invalid"
+            >
+              Confirm
+            </button>
           </div>
         </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Cancel
-        </button>
-        <button type="button" class="btn btn-danger" (click)="updatePassword()">
-          Confirm
-        </button>
       </div>
     </div>
   </div>

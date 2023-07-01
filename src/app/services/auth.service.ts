@@ -13,10 +13,15 @@ import {
 import {
   DocumentSnapshot,
   Firestore,
+  collection,
+  collectionData,
   doc,
   getDoc,
   onSnapshot,
+  query,
+  setDoc,
   updateDoc,
+  where,
 } from '@angular/fire/firestore';
 import { Observable, delay, of, switchMap } from 'rxjs';
 import { USER_TABLE } from '../utils/Constants';
@@ -28,6 +33,7 @@ import {
   uploadBytes,
 } from '@angular/fire/storage';
 import { v4 as uuidv4 } from 'uuid';
+import { UserType } from '../models/UserType';
 @Injectable({
   providedIn: 'root',
 })
@@ -39,6 +45,17 @@ export class AuthService {
     private firestore: Firestore
   ) {
     this.user = auth.currentUser;
+  }
+
+  addUser(user: Users): Promise<void> {
+    return setDoc(doc(collection(this.firestore, USER_TABLE), user.id), user);
+  }
+  getTeachers(): Observable<Users[]> {
+    const q = query(
+      collection(this.firestore, USER_TABLE),
+      where('type', '==', UserType.TEACHER)
+    );
+    return collectionData(q) as Observable<Users[]>;
   }
   getCurrentUser(): Observable<User | null> {
     return of(null).pipe(

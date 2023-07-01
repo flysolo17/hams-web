@@ -87,6 +87,7 @@ export class AddSubjectComponent implements OnInit, OnDestroy {
       this.getCurriculum().push({
         subjectID: subjectID,
         sem: this.clickedSemester,
+        schedules: [],
       });
       this.saveSubject(this.getCurriculum());
     }

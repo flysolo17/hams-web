@@ -10,6 +10,12 @@ import {
 import { getDownloadURL } from '@angular/fire/storage';
 import { USER_TABLE } from '../utils/Constants';
 import { User, UserCredential } from '@angular/fire/auth';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 declare var window: any;
 declare var window2: any;
@@ -25,8 +31,19 @@ export class SettingsComponent implements OnInit {
   PLACEHOLDER = '../../assets/images/employee.jpg';
   FOR_UPLOAD: any = null;
   user$: Users | null = null;
-
-  constructor(private authService: AuthService) {
+  passwordForm: FormGroup;
+  constructor(
+    private authService: AuthService,
+    private formBuilder: FormBuilder
+  ) {
+    this.passwordForm = this.formBuilder.group(
+      {
+        currentPassword: ['', [Validators.required]],
+        newPassword: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['', Validators.required],
+      },
+      { validator: this.passwordMatchValidator }
+    );
     authService.getCurrentUser().subscribe((result) => {
       if (result) {
         const documentRef = doc(this.firestore, USER_TABLE, result.uid);
@@ -37,7 +54,6 @@ export class SettingsComponent implements OnInit {
             if (this.user$.profile === '') {
               this.user$.profile = this.PLACEHOLDER;
             }
-            // Handle document changes here
           },
           (error) => {
             console.error('Error listening to document changes:', error);
@@ -103,28 +119,43 @@ export class SettingsComponent implements OnInit {
       console.error(error);
     }
   }
-  async validatePassword(old: string, newPassword: string) {
+  validatePassword() {
+    const current = this.passwordForm.get('currentPassword')?.value;
+    const newPassword = this.passwordForm.get('newPassword')?.value;
+
     this.authService
-      .validatePassword(old)
+      .validatePassword(current)
       .then(
         (value: UserCredential) => {
           let user = value.user;
+          this.updatePassword(user, newPassword);
         },
         (err) => alert(err.message)
       )
       .catch((err) => alert(err.message));
   }
-  updatePassword() {
-    // this.authService
-    //   .updatePassword(user, newPassword)
-    //   .then(() => {
-    //     alert('Password updated successfully');
-    //     console.log('Password updated successfully');
-    //   })
-    //   .catch((error) => {
-    //     alert(error.message);
-    //     console.error('Error updating password:', error);
-    //   });
-    alert('This feature is not implemented yet!');
+  updatePassword(user: User, newPassword: string) {
+    this.authService
+      .updatePassword(user, newPassword)
+      .then(() => {
+        alert('Password updated successfully');
+        console.log('Password updated successfully');
+      })
+      .catch((error) => {
+        alert(error.message);
+        console.error('Error updating password:', error);
+      })
+      .finally(() => this.changePassword.hide());
+  }
+
+  passwordMatchValidator(formGroup: FormGroup) {
+    const passwordControl = formGroup.get('newPassword');
+    const confirmPasswordControl = formGroup.get('confirmPassword');
+
+    if (passwordControl!.value !== confirmPasswordControl!.value) {
+      confirmPasswordControl!.setErrors({ passwordMismatch: true });
+    } else {
+      confirmPasswordControl!.setErrors(null);
+    }
   }
 }

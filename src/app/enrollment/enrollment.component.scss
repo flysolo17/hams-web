@@ -2,7 +2,9 @@
   display: flex;
   gap: 1rem;
   margin: 1rem;
+
   .box {
+    border-radius: 20px;
     padding: 1rem;
     background-color: white;
     flex-grow: 1;
