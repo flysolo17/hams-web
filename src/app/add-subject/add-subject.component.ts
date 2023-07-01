@@ -7,6 +7,7 @@ import { Observable, Subscription, map } from 'rxjs';
 import { Subjects } from '../models/Subjects';
 import { ClassesService } from '../services/classes.service';
 import { getSubjectPerSem } from '../utils/Constants';
+import { Location } from '@angular/common';
 declare var window: any;
 
 @Component({
@@ -23,7 +24,9 @@ export class AddSubjectComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private subjectService: SubjectService,
-    private classesService: ClassesService
+    private classesService: ClassesService,
+
+    private location: Location
   ) {
     this.subscription = subjectService.getAllSubjects().subscribe((data) => {
       this.subjects$ = data;
@@ -101,6 +104,11 @@ export class AddSubjectComponent implements OnInit, OnDestroy {
     return false;
   }
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+  back() {
+    this.location.back();
   }
 }

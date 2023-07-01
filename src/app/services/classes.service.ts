@@ -43,6 +43,14 @@ export class ClassesService {
       curriculum: curriculum,
     });
   }
+  getClassesBySchoolYear(schoolYear: string) {
+    const q = query(
+      this.dbRef,
+      where('schoolYear', '==', schoolYear),
+      orderBy('createdAt', 'desc')
+    );
+    return collectionData(q) as Observable<Classes[]>;
+  }
   getClassByID(id: string): Promise<DocumentSnapshot<Classes>> {
     return getDoc(
       doc(this.firestore, CLASSES_TABLE, id).withConverter(classesConverter)

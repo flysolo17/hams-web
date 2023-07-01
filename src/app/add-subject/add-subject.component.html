@@ -1,34 +1,54 @@
 <main>
-  <h4>{{ class$?.name ?? "NA" }}</h4>
-  <div>
-    <p class="text-muted mb-0">{{ class$?.schoolYear ?? "NA" }}</p>
-    <p class="text-muted mb-0">{{ class$?.educationLevel }}</p>
-  </div>
-  <div class="container">
-    <div class="sem-container">
-      <h5 class="text-primary">First Semester</h5>
-      <button class="btn btn-success" (click)="addSubject(1)">
-        Add Subject
-      </button>
+  <header class="sticky-top d-flex justify-content-between align-items-center">
+    <button class="btn" style="color: white" (click)="back()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        class="bi bi-arrow-left me-3"
+        viewBox="0 0 16 16"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
+        />
+      </svg>
+      {{ class$?.name ?? "NA" }}
+    </button>
+    <div>
+      <p class="text-white mb-0">{{ class$?.schoolYear ?? "NA" }}</p>
+      <p class="text-white mb-0">{{ class$?.educationLevel ?? "NA" }}</p>
     </div>
-    <table class="table">
-      <thead class="table-dark">
-        <tr>
-          <th scope="col">Code</th>
-          <th scope="col">Name</th>
-          <th scope="col">Unit</th>
-          <th scope="col">Teacher</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let subject of getCurriculumBySem(1)">
-          <td class="big-cell">
-            {{ getSubjectByID(subject.subjectID)?.code }}
-          </td>
-          <td>{{ getSubjectByID(subject.subjectID)?.name }}</td>
-          <td>{{ getSubjectByID(subject.subjectID)?.units }}</td>
-          <td>{{ getSubjectByID(subject.subjectID)?.teacherID }}</td>
-          <!-- <td>
+  </header>
+
+  <div style="padding: 1rem; overflow: auto">
+    <div class="box">
+      <div>
+        <div class="sem-container">
+          <h5 class="text-primary">First Semester</h5>
+          <button class="btn btn-success" (click)="addSubject(1)">
+            Add Subject
+          </button>
+        </div>
+        <table class="table table-hover table-borderless table-lg">
+          <thead>
+            <tr>
+              <th scope="col">Code</th>
+              <th scope="col">Name</th>
+              <th scope="col">Unit</th>
+              <th scope="col">Schedules</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let subject of getCurriculumBySem(1)">
+              <td class="big-cell">
+                {{ getSubjectByID(subject.subjectID)?.code }}
+              </td>
+              <td>{{ getSubjectByID(subject.subjectID)?.name }}</td>
+              <td>{{ getSubjectByID(subject.subjectID)?.units }}</td>
+              <td>{{ subject.schedules.length }}</td>
+              <!-- <td>
         <button class="btn btn-danger actions">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -44,96 +64,94 @@
           </svg>
         </button>
       </td> -->
-        </tr>
-      </tbody>
-    </table>
-
-    <h5>Total Units: {{ getTotalUnits(getCurriculumBySem(1)) }}</h5>
-  </div>
-  <div class="container">
-    <div class="sem-container">
-      <h5 class="text-primary">Second Semester</h5>
-      <button class="btn btn-success" (click)="addSubject(2)">
-        Add Subject
-      </button>
-    </div>
-    <table class="table">
-      <thead class="table-dark">
-        <tr>
-          <th scope="col">Code</th>
-          <th
-            scope="col
-        "
-          >
-            Name
-          </th>
-          <th scope="col">Unit</th>
-          <th scope="col">Teacher</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let subject of getCurriculumBySem(2)">
-          <td class="big-cell">
-            {{ getSubjectByID(subject.subjectID)?.code }}
-          </td>
-          <td>{{ getSubjectByID(subject.subjectID)?.name }}</td>
-          <td>{{ getSubjectByID(subject.subjectID)?.units }}</td>
-          <td>{{ getSubjectByID(subject.subjectID)?.teacherID }}</td>
-          <!-- <td>
-        <button class="btn btn-danger actions">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            class="bi bi-trash-fill"
-            viewBox="0 0 16 16"
-          >
-            <path
-              d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"
-            />
-          </svg>
-        </button>
-      </td> -->
-        </tr>
-      </tbody>
-    </table>
-
-    <h5>Total Units: {{ getTotalUnits(getCurriculumBySem(2)) }}</h5>
-  </div>
-  <!-- create class modal -->
-  <div
-    class="modal fade"
-    id="addSubjectDialog"
-    tabindex="-1"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header bg-success text-white">
-          <h1 class="modal-title fs-5" id="addSubjectDialog">Add Subject</h1>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <ul
-            class="list-group list-group-flush"
-            *ngFor="let subject of subjects$"
-          >
-            <li
-              *ngIf="!checkSubjectIfExists(subject.id)"
-              class="list-group-item"
-              (click)="identifySemester(subject.id)"
-            >
-              <h2>{{ subject.name }}</h2>
-            </li>
-          </ul>
-        </div>
+            </tr>
+          </tbody>
+        </table>
       </div>
+
+      <h5>Total Units: {{ getTotalUnits(getCurriculumBySem(1)) }}</h5>
+    </div>
+    <div class="box">
+      <div>
+        <div class="sem-container">
+          <h5 class="text-primary">Second Semester</h5>
+          <button class="btn btn-success" (click)="addSubject(2)">
+            Add Subject
+          </button>
+        </div>
+        <table class="table table-hover table-borderless table-lg">
+          <thead>
+            <tr>
+              <th scope="col">Code</th>
+              <th
+                scope="col
+        "
+              >
+                Name
+              </th>
+              <th scope="col">Unit</th>
+              <th scope="col">Schedule</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let subject of getCurriculumBySem(2)">
+              <td class="big-cell">
+                {{ getSubjectByID(subject.subjectID)?.code }}
+              </td>
+              <td>{{ getSubjectByID(subject.subjectID)?.name }}</td>
+              <td>{{ getSubjectByID(subject.subjectID)?.units }}</td>
+              <td>{{ subject.schedules.length }}</td>
+              <!-- <td>
+        <button class="btn btn-danger actions">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-trash-fill"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"
+            />
+          </svg>
+        </button>
+      </td> -->
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h5>Total Units: {{ getTotalUnits(getCurriculumBySem(2)) }}</h5>
     </div>
   </div>
 </main>
+<!-- create class modal -->
+<div class="modal fade" id="addSubjectDialog" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h1 class="modal-title fs-5" id="addSubjectDialog">Add Subject</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <ul
+          class="list-group list-group-flush"
+          *ngFor="let subject of subjects$"
+        >
+          <li
+            *ngIf="!checkSubjectIfExists(subject.id)"
+            class="list-group-item"
+            (click)="identifySemester(subject.id)"
+          >
+            <h5>{{ subject.name }}</h5>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

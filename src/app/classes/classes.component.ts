@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Classes } from '../models/Classes';
 import { ClassesService } from '../services/classes.service';
@@ -8,7 +8,13 @@ import {
   getNextYear,
   getYearNow,
 } from '../utils/Constants';
-import { Observable, distinct, distinctUntilChanged, map } from 'rxjs';
+import {
+  Observable,
+  Subscription,
+  distinct,
+  distinctUntilChanged,
+  map,
+} from 'rxjs';
 import { DocumentData } from '@angular/fire/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { Curriculum } from '../models/Curriculum';
@@ -19,17 +25,33 @@ declare var window: any;
   templateUrl: './classes.component.html',
   styleUrls: ['./classes.component.scss'],
 })
-export class ClassesComponent implements OnInit {
+export class ClassesComponent implements OnInit, OnDestroy {
   createClassDialog: any;
 
   classesForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
     type: new FormControl('PRIMARY', Validators.required),
   });
-  classes$: Observable<Classes[]>;
+  classes$: Classes[] = [];
   items: string[] = [];
+  private subscription: Subscription;
+  schoolYear$: string[] = [];
+  allClasses$: Classes[] = [];
+  selectedSchoolYear = this.getSchoolYearNow();
   constructor(private classService: ClassesService, private router: Router) {
-    this.classes$ = this.classService.getAllClass();
+    this.subscription = this.classService.getAllClass().subscribe((data) => {
+      this.allClasses$ = data;
+      this.classes$ = this.allClasses$.filter(
+        (value) => value.schoolYear == this.selectedSchoolYear
+      );
+
+      this.schoolYear$ = [...new Set(data.map((value) => value.schoolYear))];
+    });
+  }
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
   ngOnInit(): void {
     this.createClassDialog = new window.bootstrap.Modal(
@@ -80,5 +102,17 @@ export class ClassesComponent implements OnInit {
       )
       .catch((err) => alert(err.message))
       .finally(() => console.log('Deleted with id: ', id));
+  }
+  getSchoolYearNow() {
+    return getYearNow() + ' - ' + getNextYear();
+  }
+  onSelectChange(year: any): void {
+    if (year !== '') {
+      this.selectedSchoolYear = year.target.value;
+      this.classes$ = this.allClasses$.filter(
+        (value) => value.schoolYear == this.selectedSchoolYear
+      );
+      console.log(year, this.classes$);
+    }
   }
 }

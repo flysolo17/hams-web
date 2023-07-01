@@ -1,3 +1,22 @@
+<header class="d-flex justify-content-between align-items-center">
+  <p class="h5">School Year</p>
+
+  <select
+    class="form-select"
+    id="floatingSelect"
+    style="width: 200px"
+    aria-label="Default select example"
+    (change)="onSelectChange($event)"
+  >
+    <option
+      *ngFor="let year of schoolYear$"
+      [value]="year"
+      [selected]="year == getSchoolYearNow()"
+    >
+      {{ year }}
+    </option>
+  </select>
+</header>
 <main>
   <button
     type="button"
@@ -8,7 +27,7 @@
   </button>
   <div class="container">
     <div class="row row-cols-3">
-      <div class="col" *ngFor="let class of classes$ | async">
+      <div class="col" *ngFor="let class of classes$">
         <div class="classes-container" (click)="viewSubject(class)">
           <h2>{{ class.name }}</h2>
           <p class="subtitle">{{ class.educationLevel }}</p>

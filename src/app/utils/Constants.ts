@@ -21,14 +21,14 @@ export function getNextYear(): string {
   let year = new Date().getFullYear() + 1;
   return year.toString();
 }
-export const generateStudentID = (count: number) => {
-  const id =
-    generateNumber(1, 2) +
-    getLastTwoCharacter(getYearNow()) +
-    getLastTwoCharacter(getNextYear()) +
-    generateNumber(count, 5);
-  return id;
-};
+// export const generateStudentID = (count: number) => {
+//   const id =
+//     generateNumber(1, 2) +
+//     getLastTwoCharacter(getYearNow()) +
+//     getLastTwoCharacter(getNextYear()) +
+//     generateNumber(count, 5);
+//   return id;
+// };
 
 export function isIdExists(array: Student[], id: string): boolean {
   for (const obj of array) {
