@@ -7,6 +7,7 @@ export interface Users {
   name: string;
   profile: string;
   type: UserType;
+  createdAt: Date;
 }
 export const userConverter = {
   toFirestore: (data: Users) => data,

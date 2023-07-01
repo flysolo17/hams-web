@@ -3,6 +3,6 @@ export interface Subjects {
   name: string;
   code: string;
   units: number;
-  teacher: string;
+  teacherID: string;
   createdAt: Date;
 }
