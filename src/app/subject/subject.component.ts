@@ -9,6 +9,7 @@ import { User } from '@angular/fire/auth';
 import { Users } from '../models/Users';
 import { UserType } from '../models/UserType';
 import { DatePipe } from '@angular/common';
+import { ToastModel, ToastType } from '../cards/toast/ToastModel';
 declare var window: any;
 @Component({
   selector: 'app-subject',
@@ -16,6 +17,7 @@ declare var window: any;
   styleUrls: ['./subject.component.scss'],
 })
 export class SubjectComponent implements OnInit, OnDestroy {
+  toast: ToastModel | null = null;
   createSubjectDialog: any;
   subjectForm = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -82,8 +84,10 @@ export class SubjectComponent implements OnInit, OnDestroy {
     };
     this.subjectService
       .addSubject(subject)
-      .then(() => alert('New Subject Added!'))
-      .catch((err) => alert(err.message))
+      .then(() => this.showToast('New Subject created!', ToastType.SUCCESS))
+      .catch((err) =>
+        this.showToast('Failed to create subject!', ToastType.ERROR)
+      )
       .finally(() => {
         console.log('Subject added! ');
         this.closeModal();
@@ -92,8 +96,10 @@ export class SubjectComponent implements OnInit, OnDestroy {
   deleteSubject(id: string) {
     this.subjectService
       .deleteSubject(id)
-      .then(() => alert('Successfully Deleted!'))
-      .catch((err) => alert(err.message));
+      .then(() => this.showToast('Subject deleted!', ToastType.SUCCESS))
+      .catch((err) =>
+        this.showToast('Failed to delete subject!', ToastType.ERROR)
+      );
   }
   openModal() {
     this.createSubjectDialog.show();
@@ -134,12 +140,11 @@ export class SubjectComponent implements OnInit, OnDestroy {
       const result = await this.authService.uploadProfile(file);
       if (result) {
         user.profile = result;
+        this.saveTeacher(user);
       }
     } catch (error) {
-      alert(error);
+      this.showToast('Failed uploading profile', ToastType.ERROR);
       console.error(error);
-    } finally {
-      this.saveTeacher(user);
     }
   }
   saveTeacher(user: Users) {
@@ -147,9 +152,9 @@ export class SubjectComponent implements OnInit, OnDestroy {
     this.authService
       .addUser(user)
       .then(() => {
-        alert('New Teacher added!');
+        this.showToast('New teacher created!', ToastType.SUCCESS);
       })
-      .catch((err) => alert(err.message))
+      .catch((err) => this.showToast(err.message, ToastType.ERROR))
       .finally(() => {
         this.teacherForm.reset();
       });
@@ -162,10 +167,10 @@ export class SubjectComponent implements OnInit, OnDestroy {
     this.subjectService
       .updateSubject(subject)
       .then(() => {
-        alert('Successfully Updated!');
+        this.showToast('Subject updated successfully!', ToastType.SUCCESS);
       })
       .catch((err) => {
-        alert(err.message);
+        this.showToast(err.message, ToastType.ERROR);
       })
       .finally(() => {
         this.selectedID = '';
@@ -175,5 +180,11 @@ export class SubjectComponent implements OnInit, OnDestroy {
 
   getUserByID(id: string): Users | undefined {
     return this.teachers$.find((item) => item.id === id);
+  }
+  showToast(message: string, type: ToastType) {
+    this.toast = new ToastModel(message, type, true);
+    setTimeout(() => {
+      this.toast = null;
+    }, 2000); // 2 seconds
   }
 }

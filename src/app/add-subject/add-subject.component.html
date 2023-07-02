@@ -22,7 +22,7 @@
     </div>
   </header>
 
-  <div style="padding: 1rem; overflow: auto">
+  <div style="overflow: auto">
     <div class="box">
       <div>
         <div class="sem-container">
@@ -40,30 +40,168 @@
               <th scope="col">Schedules</th>
             </tr>
           </thead>
-          <tbody>
-            <tr *ngFor="let subject of getCurriculumBySem(1)">
+          <tbody *ngFor="let subject of getCurriculumBySem(1); index as i">
+            <tr
+              (click)="selectIndex(i)"
+              data-bs-toggle="collapse"
+              [attr.aria-expanded]="selectedIndex === i"
+              [attr.aria-controls]="i"
+            >
               <td class="big-cell">
+                <svg
+                  *ngIf="i !== selectedIndex; else close"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-caret-down-fill me-3"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"
+                  />
+                </svg>
+                <ng-template #close>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-dash-lg me-3 text-secondary"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z"
+                    />
+                  </svg>
+                </ng-template>
+
                 {{ getSubjectByID(subject.subjectID)?.code }}
               </td>
               <td>{{ getSubjectByID(subject.subjectID)?.name }}</td>
               <td>{{ getSubjectByID(subject.subjectID)?.units }}</td>
               <td>{{ subject.schedules.length }}</td>
-              <!-- <td>
-        <button class="btn btn-danger actions">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            class="bi bi-trash-fill"
-            viewBox="0 0 16 16"
-          >
-            <path
-              d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"
-            />
-          </svg>
-        </button>
-      </td> -->
+            </tr>
+            <!-- collapse views -->
+            <tr>
+              <td
+                colspan="4"
+                [ngClass]="{ collapse: selectedIndex !== i }"
+                [id]="i"
+              >
+                <!-- Collapsible row content -->
+                <div
+                  class="other-data-container"
+                  style="
+                    padding: 1rem;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    background-color: #f8f9fa;
+                    border-radius: 10px;
+                  "
+                >
+                  <h5 class="align-items-left">Schedule</h5>
+                  <div
+                    class="mb3"
+                    *ngFor="
+                      let schedule of subject.schedules;
+                      index as scheduleIndex
+                    "
+                  >
+                    <div class="input-group mb-3" style="width: 700px">
+                      <select
+                        class="form-select"
+                        aria-label="Default select example"
+                        id="day"
+                        name="day"
+                        [(ngModel)]="schedule.day"
+                      >
+                        <option selected value="">NO SELECTED</option>
+                        <option value="MONDAY">MONDAY</option>
+                        <option value="TUESDAY">TUESDAY</option>
+                        <option value="WEDNESDAY">WEDNESDAY</option>
+                        <option value="THRUSDAY">THRUSDAY</option>
+                        <option value="FRIDAY">FRIDAY</option>
+                        <option value="SATURDAY">SATURDAY</option>
+                      </select>
+                      <input
+                        type="time"
+                        class="form-control"
+                        placeholder="Start Time"
+                        aria-label="Start Time"
+                        id="startTime"
+                        name="startTime"
+                        [(ngModel)]="schedule.startTime"
+                      />
+                      <input
+                        type="time"
+                        class="form-control"
+                        placeholder="End Time"
+                        id="endTime"
+                        name="endTime"
+                        [(ngModel)]="schedule.endTime"
+                        aria-label="End Time"
+                      />
+                      <button
+                        class="btn btn-danger"
+                        (click)="removeSched(i, 1, scheduleIndex)"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          class="bi bi-x"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div
+                    class="d-flex justify-content-between"
+                    style="width: 700px"
+                  >
+                    <button
+                      class="btn btn-outline-danger"
+                      (click)="addSched(i, 1)"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        class="bi bi-clock me-3"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"
+                        />
+                        <path
+                          d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"
+                        />
+                      </svg>
+                      ADD SCHEDULE
+                    </button>
+                    <button
+                      class="btn btn-success"
+                      [disabled]="
+                        enableSaveButton(i, 1) !== 0 ||
+                        countCurriculum(i, 1) === 0
+                      "
+                      (click)="updateCurriculum()"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -71,6 +209,8 @@
 
       <h5>Total Units: {{ getTotalUnits(getCurriculumBySem(1)) }}</h5>
     </div>
+
+    <!-- Second sem -->
     <div class="box">
       <div>
         <div class="sem-container">
@@ -93,30 +233,162 @@
               <th scope="col">Schedule</th>
             </tr>
           </thead>
-          <tbody>
-            <tr *ngFor="let subject of getCurriculumBySem(2)">
+          <tbody *ngFor="let subject of getCurriculumBySem(2); index as i">
+            <tr (click)="selectIndex2(i)">
               <td class="big-cell">
+                <svg
+                  *ngIf="i !== selectedIndex2; else close"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-caret-down-fill me-3"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"
+                  />
+                </svg>
+                <ng-template #close>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-dash-lg me-3 text-secondary"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z"
+                    />
+                  </svg>
+                </ng-template>
                 {{ getSubjectByID(subject.subjectID)?.code }}
               </td>
               <td>{{ getSubjectByID(subject.subjectID)?.name }}</td>
               <td>{{ getSubjectByID(subject.subjectID)?.units }}</td>
               <td>{{ subject.schedules.length }}</td>
-              <!-- <td>
-        <button class="btn btn-danger actions">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            class="bi bi-trash-fill"
-            viewBox="0 0 16 16"
-          >
-            <path
-              d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"
-            />
-          </svg>
-        </button>
-      </td> -->
+            </tr>
+            <!-- collapse views -->
+            <tr>
+              <td
+                colspan="4"
+                [ngClass]="{ collapse: selectedIndex2 !== i }"
+                [id]="i"
+              >
+                <!-- Collapsible row content -->
+                <div
+                  class="other-data-container"
+                  style="
+                    padding: 1rem;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    background-color: #f8f9fa;
+                    border-radius: 10px;
+                  "
+                >
+                  <h5 class="align-items-left">Schedule</h5>
+                  <div
+                    class="mb3"
+                    *ngFor="
+                      let schedule of subject.schedules;
+                      index as scheduleIndex
+                    "
+                  >
+                    <div class="input-group mb-3" style="width: 700px">
+                      <select
+                        class="form-select"
+                        aria-label="Default select example"
+                        id="day"
+                        name="day"
+                        [(ngModel)]="schedule.day"
+                      >
+                        <option selected value="">NO SELECTED</option>
+                        <option value="MONDAY">MONDAY</option>
+                        <option value="TUESDAY">TUESDAY</option>
+                        <option value="WEDNESDAY">WEDNESDAY</option>
+                        <option value="THRUSDAY">THRUSDAY</option>
+                        <option value="FRIDAY">FRIDAY</option>
+                        <option value="SATURDAY">SATURDAY</option>
+                      </select>
+                      <input
+                        type="time"
+                        class="form-control"
+                        placeholder="Start Time"
+                        aria-label="Start Time"
+                        id="startTime"
+                        name="startTime"
+                        [(ngModel)]="schedule.startTime"
+                      />
+                      <input
+                        type="time"
+                        class="form-control"
+                        placeholder="End Time"
+                        id="endTime"
+                        name="endTime"
+                        [(ngModel)]="schedule.endTime"
+                        aria-label="End Time"
+                      />
+                      <button
+                        class="btn btn-danger"
+                        (click)="removeSched(i, 2, scheduleIndex)"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          class="bi bi-x"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div
+                    class="d-flex justify-content-between"
+                    style="width: 700px"
+                  >
+                    <button
+                      class="btn btn-outline-danger"
+                      (click)="addSched(i, 2)"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        class="bi bi-clock me-3"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"
+                        />
+                        <path
+                          d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"
+                        />
+                      </svg>
+                      ADD SCHEDULE
+                    </button>
+                    <button
+                      class="btn btn-success"
+                      [disabled]="
+                        enableSaveButton(i, 2) !== 0 ||
+                        countCurriculum(i, 2) === 0
+                      "
+                      (click)="updateCurriculum()"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -155,3 +427,4 @@
     </div>
   </div>
 </div>
+<app-toast [toast]="toast"></app-toast>

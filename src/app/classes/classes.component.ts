@@ -19,6 +19,11 @@ import { DocumentData } from '@angular/fire/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { Curriculum } from '../models/Curriculum';
 import { Router } from '@angular/router';
+import {
+  ToastModel,
+  ToastPosition,
+  ToastType,
+} from '../cards/toast/ToastModel';
 declare var window: any;
 @Component({
   selector: 'app-classes',
@@ -26,6 +31,7 @@ declare var window: any;
   styleUrls: ['./classes.component.scss'],
 })
 export class ClassesComponent implements OnInit, OnDestroy {
+  toast: ToastModel | null = null;
   createClassDialog: any;
 
   classesForm = new FormGroup({
@@ -86,10 +92,10 @@ export class ClassesComponent implements OnInit, OnDestroy {
       this.classService
         .addClass(data)
         .then(
-          () => alert('success'),
-          (err) => alert(err)
+          () => this.showToast('New Class added!', ToastType.SUCCESS),
+          (err) => this.showToast(err.message, ToastType.ERROR)
         )
-        .catch((err) => alert(err))
+        .catch((err) => this.showToast(err.message, ToastType.ERROR))
         .finally(() => this.closeModal());
     }
   }
@@ -97,10 +103,10 @@ export class ClassesComponent implements OnInit, OnDestroy {
     this.classService
       .deleteClass(id)
       .then(
-        () => alert('Successfully Deleted!'),
-        (err) => alert(err.message)
+        () => this.showToast('Class successfully Deleted!', ToastType.ERROR),
+        (err) => this.showToast(err.message, ToastType.ERROR)
       )
-      .catch((err) => alert(err.message))
+      .catch((err) => this.showToast(err.message, ToastType.ERROR))
       .finally(() => console.log('Deleted with id: ', id));
   }
   getSchoolYearNow() {
@@ -114,5 +120,11 @@ export class ClassesComponent implements OnInit, OnDestroy {
       );
       console.log(year, this.classes$);
     }
+  }
+  showToast(message: string, type: ToastType) {
+    this.toast = new ToastModel(message, type, true);
+    setTimeout(() => {
+      this.toast = null;
+    }, 2000); // 2 seconds
   }
 }

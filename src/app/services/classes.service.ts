@@ -56,4 +56,9 @@ export class ClassesService {
       doc(this.firestore, CLASSES_TABLE, id).withConverter(classesConverter)
     );
   }
+  updateSchedule(classID: string, curriculum: Curriculum[]) {
+    return updateDoc(doc(this.dbRef, classID), {
+      curriculum: curriculum,
+    });
+  }
 }

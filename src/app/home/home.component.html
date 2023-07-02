@@ -3,21 +3,22 @@
     <p class="h5">Dashboard</p>
   </header>
   <div class="box-container">
-    <div class="box box-1">
-      <h3>{{ getEnrolled().length }}</h3>
-      <p class="text-muted">ENROLLED</p>
-    </div>
     <div class="box box-2">
-      <h3>{{ getPreEnrolled().length }}</h3>
-      <p class="text-muted">PRE ENROLLED</p>
+      <h3>{{ getEnrolled().length }}</h3>
+      <p class="text-success">ENROLLED</p>
     </div>
+    <div class="box box-1">
+      <h3>{{ students$.length }}</h3>
+      <p class="text-warning">STUDENTS</p>
+    </div>
+
     <div class="box box-3">
-      <h3>{{ getDropout().length }}</h3>
-      <p class="text-muted">DROP OUT</p>
+      <h3>0</h3>
+      <p class="text-danger">LIBRARIAN</p>
     </div>
     <div class="box box-4">
       <h3>{{ teachers$.length }}</h3>
-      <p class="text-muted">TEACHERS</p>
+      <p class="text-danger">TEACHERS</p>
     </div>
   </div>
   <div class="container d-flex" style="gap: 1rem; padding: 1rem; height: 100%">
@@ -28,6 +29,7 @@
         background-color: white;
         height: 100%;
         width: 70%;
+        overflow: auto;
         border-radius: 20px;
       "
     >
@@ -72,6 +74,7 @@
         background-color: white;
         height: 100%;
         flex-grow: 1;
+        overflow: auto;
         border-radius: 20px;
       "
     >

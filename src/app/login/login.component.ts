@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { UserCredential } from '@angular/fire/auth';
+import { ToastModel, ToastType } from '../cards/toast/ToastModel';
 declare var window: any;
 @Component({
   selector: 'app-login',
@@ -10,6 +11,7 @@ declare var window: any;
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
+  toast: ToastModel | null = null;
   forgotPasswordModal: any;
   loginForm = new FormGroup({
     email: new FormControl(''),
@@ -33,8 +35,12 @@ export class LoginComponent implements OnInit {
   forgotPassword(email: string) {
     this.authService
       .forgotPassword(email)
-      .then(() => alert('Password reset link sent to : ' + email))
-      .catch((err) => alert(err.message))
+      .then(() => {
+        alert();
+        let message = 'Password reset link sent to : ' + email;
+        this.showToast(message, ToastType.SUCCESS);
+      })
+      .catch((err) => this.showToast(err.message, ToastType.ERROR))
       .finally(() => {
         this.closeModal();
       });
@@ -45,14 +51,13 @@ export class LoginComponent implements OnInit {
       .then(
         (user: UserCredential) => {
           if (!!user) {
-            alert('Welcome back!');
-            this.router.navigate(['main']);
+            this.showToast('Successfully Logged in!', ToastType.SUCCESS);
+            this.navigateToMain();
           }
         },
-        (err) => alert(err.message)
+        (err) => this.showToast(err.message, ToastType.ERROR)
       )
-      .catch((err) => alert(err.message))
-      .finally(() => {});
+      .catch((err) => this.showToast(err.message, ToastType.ERROR));
   }
 
   openModal() {
@@ -60,5 +65,16 @@ export class LoginComponent implements OnInit {
   }
   closeModal() {
     this.forgotPasswordModal.hide();
+  }
+  navigateToMain() {
+    setTimeout(() => {
+      this.router.navigate(['main']);
+    }, 2000);
+  }
+  showToast(message: string, type: ToastType) {
+    this.toast = new ToastModel(message, type, true);
+    setTimeout(() => {
+      this.toast = null;
+    }, 2000); // 2 seconds
   }
 }
