@@ -29,6 +29,7 @@ import { SubjectCardComponent } from './cards/subject-card/subject-card.componen
 import { ViewAcademicsComponent } from './view-academics/view-academics.component';
 
 import { DatePipe } from '@angular/common';
+import { ToastComponent } from './cards/toast/toast.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { DatePipe } from '@angular/common';
     AddStudentComponent,
     SubjectCardComponent,
     ViewAcademicsComponent,
+    ToastComponent,
   ],
   imports: [
     BrowserModule,

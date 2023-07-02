@@ -4,7 +4,6 @@ import { ValidatorFn } from '@angular/forms';
 import { Injectable } from '@angular/core';
 import { Student } from '../models/Student';
 import { StudentService } from '../services/student.service';
-import { generateStudentID, isIdExists } from '../utils/Constants';
 import { ContactType } from '../models/ContactType';
 import { StudentStatus } from '../models/StudentStatus';
 import { Gender } from '../models/Gender';

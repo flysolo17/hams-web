@@ -9,6 +9,8 @@ import {
   getEnrolledStudents,
   getPreEnrolledStudents,
 } from '../utils/Constants';
+import { Users } from '../models/Users';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -17,16 +19,23 @@ import {
 })
 export class HomeComponent implements OnInit, OnDestroy {
   students$: Student[] = [];
+  teachers$: Users[] = [];
   subscription: Subscription;
+  teacherSubscription: Subscription;
   constructor(
     private authService: AuthService,
-    private studentService: StudentService
+    private studentService: StudentService,
+    private datePipe: DatePipe
   ) {
     this.subscription = studentService
       .getAllStudents()
       .subscribe((data: Student[]) => {
         this.students$ = data;
       });
+
+    this.teacherSubscription = authService.getTeachers().subscribe((data) => {
+      this.teachers$ = data;
+    });
   }
 
   getEnrolled(): Student[] {
@@ -39,7 +48,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     return getDropOutStudents(this.students$);
   }
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    if (this.teacherSubscription) {
+      this.teacherSubscription.unsubscribe();
+    }
   }
   ngOnInit(): void {}
   logout() {
@@ -48,5 +62,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       .logout()
       .then(() => console.log('success'))
       .catch((err) => console.log(err.mesage));
+  }
+  formatDate(timestamp: any) {
+    const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
+    return this.datePipe.transform(date, 'mediumDate');
   }
 }

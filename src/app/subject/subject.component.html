@@ -1,291 +1,300 @@
 <main>
-  <div class="table-container">
-    <div class="d-flex justify-content-between">
-      <p class="h4 text-primary">Subjects</p>
-      <button class="btn btn-outline-success" (click)="openModal()">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          fill="currentColor"
-          class="bi bi-plus-square-fill me-3"
-          viewBox="0 0 16 16"
-        >
-          <path
-            d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"
-          />
-        </svg>
-        Add Subject
-      </button>
-    </div>
+  <header class="d-flex justify-content-between align-items-center">
+    <p class="h5">Subjects</p>
+  </header>
+  <div class="d-flex" style="height: 100%; gap: 1rem; padding: 1rem">
+    <div class="table-container">
+      <div class="d-flex justify-content-between">
+        <p class="h4 text-primary">Subjects</p>
+        <button class="btn btn-outline-success" (click)="openModal()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-plus-square-fill me-3"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"
+            />
+          </svg>
+          Add Subject
+        </button>
+      </div>
 
-    <table class="table table-hover table-borderless table-lg">
-      <thead>
-        <tr>
-          <th>Subject Code</th>
-          <th>Name</th>
-          <th>Units</th>
-          <th>Teacher</th>
-        </tr>
-      </thead>
-      <tbody *ngFor="let subject of subjects$">
-        <tr
-          (click)="expanded(subject.id)"
-          data-bs-toggle="collapse"
-          [attr.aria-expanded]="selectedID === subject.id"
-          [attr.aria-controls]="subject.id"
-        >
-          <td>
-            <svg
-              *ngIf="selectedID !== subject.id; else close"
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-caret-down-fill me-3"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"
-              />
-            </svg>
-            <ng-template #close>
+      <table class="table table-hover table-borderless table-lg">
+        <thead>
+          <tr>
+            <th>Subject Code</th>
+            <th>Name</th>
+            <th>Units</th>
+            <th>Teacher</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let subject of subjects$">
+          <tr
+            (click)="expanded(subject.id)"
+            data-bs-toggle="collapse"
+            [attr.aria-expanded]="selectedID === subject.id"
+            [attr.aria-controls]="subject.id"
+          >
+            <td>
               <svg
+                *ngIf="selectedID !== subject.id; else close"
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
                 fill="currentColor"
-                class="bi bi-dash-lg me-3 text-secondary"
+                class="bi bi-caret-down-fill me-3"
                 viewBox="0 0 16 16"
               >
                 <path
-                  fill-rule="evenodd"
-                  d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z"
+                  d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"
                 />
               </svg>
-            </ng-template>
+              <ng-template #close>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-dash-lg me-3 text-secondary"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z"
+                  />
+                </svg>
+              </ng-template>
 
-            <b style="text-transform: uppercase">{{ subject.code }}</b>
-          </td>
-          <td>{{ subject.name }}</td>
-          <td>{{ subject.units }}</td>
-          <td>{{ getUserByID(subject.teacherID)?.name }}</td>
-        </tr>
-        <tr>
-          <td
-            colspan="4"
-            [ngClass]="{ collapse: selectedID !== subject.id }"
-            [id]="subject.id"
-          >
-            <!-- Collapsible row content -->
-            <div
-              class="other-data-container"
-              style="
-                background-color: #e6e0e9;
-                padding: 1rem;
-                border-radius: 10px;
-              "
+              <b style="text-transform: uppercase">{{ subject.code }}</b>
+            </td>
+            <td>{{ subject.name }}</td>
+            <td>{{ subject.units }}</td>
+            <td>{{ getUserByID(subject.teacherID)?.name }}</td>
+          </tr>
+          <tr>
+            <td
+              colspan="4"
+              [ngClass]="{ collapse: selectedID !== subject.id }"
+              [id]="subject.id"
             >
-              <p class="text-success h5">Edit Information</p>
-              <hr />
-              <form (ngSubmit)="updateSubject(subject)">
-                <div class="row g-3">
-                  <div class="col-md-7">
-                    <div class="form-floating mb-3">
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="name"
-                        name="name"
-                        [(ngModel)]="subject.name"
-                      />
-                      <label for="name">Subject Name</label>
+              <!-- Collapsible row content -->
+              <div
+                class="other-data-container"
+                style="
+                  background-color: #e6e0e9;
+                  padding: 1rem;
+                  border-radius: 10px;
+                "
+              >
+                <p class="text-success h5">Edit Information</p>
+                <hr />
+                <form (ngSubmit)="updateSubject(subject)">
+                  <div class="row g-3">
+                    <div class="col-md-7">
+                      <div class="form-floating mb-3">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="name"
+                          name="name"
+                          [(ngModel)]="subject.name"
+                        />
+                        <label for="name">Subject Name</label>
+                      </div>
                     </div>
-                  </div>
-                  <div class="col-md">
-                    <div class="form-floating mb-3">
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="code"
-                        name="code"
-                        [(ngModel)]="subject.code"
-                      />
-                      <label for="code">Subject code</label>
+                    <div class="col-md">
+                      <div class="form-floating mb-3">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="code"
+                          name="code"
+                          [(ngModel)]="subject.code"
+                        />
+                        <label for="code">Subject code</label>
+                      </div>
                     </div>
-                  </div>
-                  <div class="col-md">
-                    <div class="form-floating mb-3">
-                      <input
-                        type="number"
-                        class="form-control"
-                        id="units"
-                        name="units"
-                        [(ngModel)]="subject.units"
-                      />
-                      <label for="unit">Units</label>
+                    <div class="col-md">
+                      <div class="form-floating mb-3">
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="units"
+                          name="units"
+                          [(ngModel)]="subject.units"
+                        />
+                        <label for="unit">Units</label>
+                      </div>
                     </div>
-                  </div>
-                  <div class="col-md-12">
-                    <div class="form-floating">
-                      <select
-                        class="form-select"
-                        [(ngModel)]="subject.teacherID"
-                        name="teacherID"
-                        id="floatingSelectDisabled"
-                        aria-label="Floating label disabled select example"
-                      >
-                        <option value="" selected disabled>
-                          Select Teacher
-                        </option>
-                        <option
-                          *ngFor="let teacher of teachers$"
-                          [value]="teacher.id"
+                    <div class="col-md-12">
+                      <div class="form-floating">
+                        <select
+                          class="form-select"
+                          [(ngModel)]="subject.teacherID"
+                          name="teacherID"
+                          id="floatingSelectDisabled"
+                          aria-label="Floating label disabled select example"
                         >
-                          {{ teacher.name }}
-                        </option>
-                      </select>
-                      <label for="floatingSelectDisabled">Select Teacher</label>
+                          <option value="" selected disabled>
+                            Select Teacher
+                          </option>
+                          <option
+                            *ngFor="let teacher of teachers$"
+                            [value]="teacher.id"
+                          >
+                            {{ teacher.name }}
+                          </option>
+                        </select>
+                        <label for="floatingSelectDisabled"
+                          >Select Teacher</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col-12 d-flex flex-row-reverse">
+                      <button type="submit" class="btn btn-primary">
+                        Save
+                      </button>
                     </div>
                   </div>
-                  <div class="col-12 d-flex flex-row-reverse">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div
-    class="teachers-container"
-    style="
-      background-color: white;
-      border-radius: 20px;
-      height: 100%;
-      width: 30%;
-      margin-bottom: 1rem;
-      flex-grow: 1;
-      padding: 1rem;
-      overflow: auto;
-    "
-  >
-    <div class="d-flex justify-content-between mb-3 align-items-center">
-      <p class="h4 text-danger">Teachers</p>
-      <button
-        class="btn btn-outline-success"
-        data-bs-toggle="collapse"
-        data-bs-target="#collapseExample"
-        aria-expanded="false"
-        aria-controls="collapseExample"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          fill="currentColor"
-          class="bi bi-plus-square-fill me-3"
-          viewBox="0 0 16 16"
+                </form>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div
+      class="teachers-container"
+      style="
+        background-color: white;
+        border-radius: 20px;
+        height: 100%;
+        width: 30%;
+        margin-bottom: 1rem;
+        flex-grow: 1;
+        padding: 1rem;
+        overflow: auto;
+      "
+    >
+      <div class="d-flex justify-content-between mb-3 align-items-center">
+        <p class="h4 text-danger">Teachers</p>
+        <button
+          class="btn btn-outline-success"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseExample"
+          aria-expanded="false"
+          aria-controls="collapseExample"
         >
-          <path
-            d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"
-          />
-        </svg>
-        Add
-      </button>
-    </div>
-
-    <div class="collapse mt-3" id="collapseExample">
-      <div class="card card-body">
-        <div class="d-flex align-items-end gap-3 mb-3">
-          <form [formGroup]="teacherForm" (submit)="createTeacher()">
-            <h5 class="text-primary mb-3">Create Teacher</h5>
-            <div class="form-floating mb-3">
-              <input
-                type="text"
-                class="form-control"
-                formControlName="name"
-                id="teacher"
-                #teacherName
-                placeholder="Fullname"
-                required
-                [ngClass]="{
-                  'is-invalid':
-                    'submitted' &&
-                    teacherForm.controls.name.errors &&
-                    teacherForm.controls.name.touched
-                }"
-              />
-              <label for="teacher">Name</label>
-              <div class="invalid-feedback">Please add fullname</div>
-            </div>
-            <div class="mb-3">
-              <input
-                type="file"
-                accept="image/*"
-                (change)="onFileSelected($event)"
-                class="form-control"
-                formControlName="profile"
-                aria-label="file example"
-                required
-                [ngClass]="{
-                  'is-invalid':
-                    'submitted' &&
-                    teacherForm.controls.profile.errors &&
-                    teacherForm.controls.profile.touched
-                }"
-              />
-              <div class="invalid-feedback">Please add image</div>
-            </div>
-
-            <button
-              class="btn btn-success text-align-end"
-              type="submit"
-              [disabled]="teacherForm.invalid"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapseExample"
-              aria-expanded="false"
-              aria-controls="collapseExample"
-            >
-              Save
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-    <ul class="list-group list-group-flush" *ngFor="let teacher of teachers$">
-      <li class="list-group-item">
-        <div class="d-flex">
-          <img
-            *ngIf="teacher.profile; else placeholderImage"
-            [src]="teacher.profile"
-            alt="Profile Image"
-            width="60px"
-            height="60px"
-            style="border-radius: 50%; border: 2px solid #eee"
-          />
-
-          <ng-template #placeholderImage>
-            <img
-              src="../../assets/images/employee.jpg"
-              alt="Placeholder Image"
-              width="60px"
-              style="border-radius: 50%"
-              height="60px"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-plus-square-fill me-3"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"
             />
-          </ng-template>
-          <div class="ms-2" style="width: 100%">
-            <h6>{{ teacher.name }}</h6>
-            <p class="text-subtitle text-muted">
-              {{ formatDate(teacher.createdAt) | date : "fullDate" }}
-            </p>
-            <hr />
+          </svg>
+          Add
+        </button>
+      </div>
+
+      <div class="collapse mt-3" id="collapseExample">
+        <div class="card card-body">
+          <div class="d-flex align-items-end gap-3 mb-3">
+            <form [formGroup]="teacherForm" (submit)="createTeacher()">
+              <h5 class="text-primary mb-3">Create Teacher</h5>
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="name"
+                  id="teacher"
+                  #teacherName
+                  placeholder="Fullname"
+                  required
+                  [ngClass]="{
+                    'is-invalid':
+                      'submitted' &&
+                      teacherForm.controls.name.errors &&
+                      teacherForm.controls.name.touched
+                  }"
+                />
+                <label for="teacher">Name</label>
+                <div class="invalid-feedback">Please add fullname</div>
+              </div>
+              <div class="mb-3">
+                <input
+                  type="file"
+                  accept="image/*"
+                  (change)="onFileSelected($event)"
+                  class="form-control"
+                  formControlName="profile"
+                  aria-label="file example"
+                  required
+                  [ngClass]="{
+                    'is-invalid':
+                      'submitted' &&
+                      teacherForm.controls.profile.errors &&
+                      teacherForm.controls.profile.touched
+                  }"
+                />
+                <div class="invalid-feedback">Please add image</div>
+              </div>
+
+              <button
+                class="btn btn-success text-align-end"
+                type="submit"
+                [disabled]="teacherForm.invalid"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseExample"
+                aria-expanded="false"
+                aria-controls="collapseExample"
+              >
+                Save
+              </button>
+            </form>
           </div>
         </div>
-      </li>
-    </ul>
+      </div>
+      <ul class="list-group list-group-flush" *ngFor="let teacher of teachers$">
+        <li class="list-group-item">
+          <div class="d-flex">
+            <img
+              *ngIf="teacher.profile; else placeholderImage"
+              [src]="teacher.profile"
+              alt="Profile Image"
+              width="60px"
+              height="60px"
+              style="border-radius: 50%; border: 2px solid #eee"
+            />
+
+            <ng-template #placeholderImage>
+              <img
+                src="../../assets/images/employee.jpg"
+                alt="Placeholder Image"
+                width="60px"
+                style="border-radius: 50%"
+                height="60px"
+              />
+            </ng-template>
+            <div class="ms-2" style="width: 100%">
+              <h6>{{ teacher.name }}</h6>
+              <p class="text-subtitle text-muted">
+                {{ formatDate(teacher.createdAt) | date : "fullDate" }}
+              </p>
+              <hr />
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </main>
 
@@ -377,3 +386,4 @@
     </div>
   </div>
 </div>
+<app-toast [toast]="toast"></app-toast>

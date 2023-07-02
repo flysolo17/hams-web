@@ -7,6 +7,13 @@ import { Observable, Subscription, map } from 'rxjs';
 import { Subjects } from '../models/Subjects';
 import { ClassesService } from '../services/classes.service';
 import { getSubjectPerSem } from '../utils/Constants';
+import { Location } from '@angular/common';
+import { Schedule } from '../models/Schedule';
+import {
+  ToastModel,
+  ToastPosition,
+  ToastType,
+} from '../cards/toast/ToastModel';
 declare var window: any;
 
 @Component({
@@ -15,15 +22,19 @@ declare var window: any;
   styleUrls: ['./add-subject.component.scss'],
 })
 export class AddSubjectComponent implements OnInit, OnDestroy {
+  toast: ToastModel | null = null;
   addSubjectDialog: any;
   class$: Classes | undefined;
   subjects$: Subjects[] = [];
   clickedSemester: number | undefined;
+  selectedIndex: number = -1;
+  selectedIndex2: number = -1;
   private subscription: Subscription;
   constructor(
     private route: ActivatedRoute,
     private subjectService: SubjectService,
-    private classesService: ClassesService
+    private classesService: ClassesService,
+    private location: Location
   ) {
     this.subscription = subjectService.getAllSubjects().subscribe((data) => {
       this.subjects$ = data;
@@ -63,8 +74,8 @@ export class AddSubjectComponent implements OnInit, OnDestroy {
   saveSubject(curriculum: Curriculum[]) {
     this.classesService
       .addSubject(this.class$?.id!, curriculum)
-      .then(() => alert('Successfully Updated!'))
-      .catch((err: any) => alert(err.message))
+      .then(() => this.showToast('Successfully updated', ToastType.SUCCESS))
+      .catch((err: any) => this.showToast(err.message, ToastType.ERROR))
       .finally(() => {
         this.closeModal();
         console.log('new subject added!');
@@ -101,6 +112,66 @@ export class AddSubjectComponent implements OnInit, OnDestroy {
     return false;
   }
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+  back() {
+    this.location.back();
+  }
+  selectIndex(index: number) {
+    if (this.selectedIndex != index) {
+      this.selectedIndex = index;
+    } else {
+      this.selectedIndex = -1;
+    }
+  }
+  selectIndex2(index: number) {
+    if (this.selectedIndex2 != index) {
+      this.selectedIndex2 = index;
+    } else {
+      this.selectedIndex2 = -1;
+    }
+  }
+  addSched(index: number, sem: number) {
+    let sched: Schedule = {
+      day: '',
+      startTime: '',
+      endTime: '',
+    };
+    this.getCurriculumBySem(sem)[index].schedules.push(sched);
+  }
+  removeSched(index: number, sem: number, indexToRemove: number) {
+    this.getCurriculumBySem(sem)[index].schedules.splice(indexToRemove, 1);
+  }
+  enableSaveButton(index: number, sem: number): number {
+    let data = this.getCurriculumBySem(sem)[index].schedules.filter(
+      (data) => data.day === '' || data.startTime === '' || data.endTime == ''
+    );
+    return data.length;
+  }
+  countCurriculum(index: number, sem: number): number {
+    return this.getCurriculumBySem(sem)[index].schedules.length;
+  }
+  updateCurriculum() {
+    let id: string = this.class$?.id!;
+    let curriculum: Curriculum[] = this.class$?.curriculum!;
+    this.classesService
+      .updateSchedule(id, curriculum)
+      .then(() => {
+        this.showToast('Curriculum updated successfully!', ToastType.SUCCESS);
+      })
+      .catch((err) => this.showToast(err.message, ToastType.ERROR))
+      .finally(() => {
+        this.selectedIndex = -1;
+        this.selectedIndex2 = -1;
+      });
+  }
+
+  showToast(message: string, type: ToastType) {
+    this.toast = new ToastModel(message, type, true, ToastPosition.BOTTOM);
+    setTimeout(() => {
+      this.toast = null;
+    }, 2000); // 2 seconds
   }
 }

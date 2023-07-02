@@ -1,49 +1,115 @@
 <main>
+  <header class="d-flex justify-content-between align-items-center">
+    <p class="h5">Dashboard</p>
+  </header>
   <div class="box-container">
-    <div class="box box-1" style="border-left: 5px solid green">
-      <h3>Enrolled</h3>
-      <p class="h4">{{ getEnrolled().length }}</p>
+    <div class="box box-2">
+      <h3>{{ getEnrolled().length }}</h3>
+      <p class="text-success">ENROLLED</p>
     </div>
-    <div class="box box-2" style="border-left: 5px solid yellow">
-      <h3>Pre Enrolled</h3>
-      <p class="h4">{{ getPreEnrolled().length }}</p>
+    <div class="box box-1">
+      <h3>{{ students$.length }}</h3>
+      <p class="text-warning">STUDENTS</p>
     </div>
-    <div class="box box-3" style="border-left: 5px solid red">
-      <h3>Drop Out</h3>
-      <p class="h4">{{ getDropout().length }}</p>
+
+    <div class="box box-3">
+      <h3>0</h3>
+      <p class="text-danger">LIBRARIAN</p>
+    </div>
+    <div class="box box-4">
+      <h3>{{ teachers$.length }}</h3>
+      <p class="text-danger">TEACHERS</p>
     </div>
   </div>
-  <h4 class="text-primary">Students</h4>
-  <table class="table table-lg">
-    <thead class="table-dark">
-      <tr>
-        <th scope="col">Student ID</th>
-        <th
-          scope="col
+  <div class="container d-flex" style="gap: 1rem; padding: 1rem; height: 100%">
+    <div
+      class="d-flex flex-column"
+      style="
+        padding: 1rem;
+        background-color: white;
+        height: 100%;
+        width: 70%;
+        overflow: auto;
+        border-radius: 20px;
+      "
+    >
+      <h5 class="text-primary">Students</h5>
+      <table class="table table-hover table-borderless table-lg">
+        <thead>
+          <tr>
+            <th scope="col">Student ID</th>
+            <th
+              scope="col
         "
-        >
-          Fullname
-        </th>
-        <th scope="col">Gender</th>
-        <th scope="col">Status</th>
-      </tr>
-    </thead>
-    <tbody class="table-group-divider">
-      <tr *ngFor="let student of students$">
-        <td>{{ student.id }}</td>
-        <td>
-          {{
-            student.studentInfo.lastname +
-              " " +
-              student.studentInfo.firstName +
-              " " +
-              student.studentInfo.middleName
-          }}
-        </td>
+            >
+              Fullname
+            </th>
+            <th scope="col">Gender</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+          <tr *ngFor="let student of students$">
+            <td>{{ student.id }}</td>
+            <td>
+              {{
+                student.studentInfo.lastname +
+                  " " +
+                  student.studentInfo.firstName +
+                  " " +
+                  student.studentInfo.middleName
+              }}
+            </td>
 
-        <td>{{ student.studentInfo.gender }}</td>
-        <td>{{ student.status }}</td>
-      </tr>
-    </tbody>
-  </table>
+            <td>{{ student.studentInfo.gender }}</td>
+            <td>{{ student.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div
+      class="d-flex flex-column"
+      style="
+        padding: 1rem;
+        background-color: white;
+        height: 100%;
+        flex-grow: 1;
+        overflow: auto;
+        border-radius: 20px;
+      "
+    >
+      <h5 class="text-success">Teachers</h5>
+      <ul class="list-group list-group-flush" *ngFor="let teacher of teachers$">
+        <li class="list-group-item">
+          <div class="d-flex">
+            <img
+              *ngIf="teacher.profile; else placeholderImage"
+              [src]="teacher.profile"
+              alt="Profile Image"
+              width="60px"
+              height="60px"
+              style="border-radius: 50%; border: 2px solid #eee"
+            />
+
+            <ng-template #placeholderImage>
+              <img
+                src="../../assets/images/employee.jpg"
+                alt="Placeholder Image"
+                width="60px"
+                style="border-radius: 50%"
+                height="60px"
+              />
+            </ng-template>
+            <div class="ms-2" style="width: 100%">
+              <h6>{{ teacher.name }}</h6>
+              <p class="text-subtitle text-muted">
+                {{ formatDate(teacher.createdAt) | date : "mediumDate" }}
+              </p>
+              <hr />
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
 </main>
