@@ -1,0 +1,14 @@
+.container-fluid {
+  padding: 1rem;
+  min-height: 100vh;
+  .col {
+    padding: 10px;
+    .box {
+      padding: 1rem;
+      background-color: white;
+      height: 100%;
+      width: 100%;
+      border-radius: 7px;
+    }
+  }
+}

@@ -1,0 +1,87 @@
+<div
+  *ngIf="LOADING; else main"
+  class="d-flex justify-content-center h-100 d-flex justify-content-center"
+>
+  <h5>Loading.....</h5>
+</div>
+<ng-template #main>
+  <div class="container-fluid bg-light d-flex flex-column">
+    <div class="row">
+      <div class="col">
+        <div class="box box-1">
+          <h4>Processing</h4>
+          <p>{{ getEnrollmentByStatus(0).length }}</p>
+        </div>
+      </div>
+      <div class="col">
+        <div class="box box-1">
+          <h4>Enrolled</h4>
+          <p>{{ getEnrollmentByStatus(1).length }}</p>
+        </div>
+      </div>
+      <div class="col">
+        <div class="box box-1">
+          <h4>Cancelled</h4>
+          <p class="text-subtitle">{{ getEnrollmentByStatus(2).length }}</p>
+        </div>
+      </div>
+      <div class="col">
+        <div class="box box-1">
+          <h4>Decline</h4>
+          <p>{{ getEnrollmentByStatus(3).length }}</p>
+        </div>
+      </div>
+      <div class="col">
+        <div class="box box-1">
+          <h4>Passed</h4>
+          <p>{{ getEnrollmentByStatus(4).length }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="row flex-grow-1">
+      <div class="col col-8">
+        <div class="box d-flex flex-column">
+          <h6 class="text-primary">Enrollment Request</h6>
+          <table class="table table-hover table-borderless">
+            <thead>
+              <tr>
+                <th scope="col">Student ID</th>
+                <th scope="col">Grade Level</th>
+                <th scope="col">Track</th>
+                <th scope="col">Strand</th>
+                <th scope="col">Sem</th>
+                <th scope="col">Enrollment Date</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody *ngFor="let enrollment of getEnrollmentByStatus(0)">
+              <tr>
+                <th scope="row">{{ enrollment.student_id }}</th>
+                <td>{{ enrollment.grade_level }}</td>
+                <td>{{ enrollment.track ?? "none" }}</td>
+                <td>{{ enrollment.strand ?? "none" }}</td>
+                <td>{{ enrollment.semester ?? "none" }}</td>
+                <td>
+                  {{ convertDate(enrollment.enrollment_date.toString()) }}
+                </td>
+                <td>
+                  <button
+                    class="btn btn-success"
+                    [routerLink]="['view-enrollment', enrollment.id]"
+                  >
+                    View More
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col col-4">
+        <div class="box">
+          <h6 class="text-primary">Enrolled</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
