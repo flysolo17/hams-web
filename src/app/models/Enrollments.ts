@@ -1,3 +1,5 @@
+import { Subjects } from './Subjects';
+
 export class Enrollments {
   id: number;
   student_id: number;
@@ -10,7 +12,7 @@ export class Enrollments {
   updated_at: Date;
   enrollment_types: Set<string>;
   status: number;
-
+  enrolled_subjects?: Subjects[] = [];
   constructor(
     id: number,
     student_id: number,
@@ -22,7 +24,8 @@ export class Enrollments {
     enrollment_date: Date,
     updated_at: Date,
     enrollment_types: Set<string>,
-    status: number
+    status: number,
+    enrolled_subjects?: Subjects[]
   ) {
     this.id = id;
     this.student_id = student_id;
@@ -35,5 +38,6 @@ export class Enrollments {
     this.updated_at = updated_at;
     this.enrollment_types = enrollment_types;
     this.status = status;
+    this.enrolled_subjects = enrolled_subjects;
   }
 }

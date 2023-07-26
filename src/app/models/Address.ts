@@ -1,4 +1,4 @@
-class Address {
+export class Address {
   id?: number;
   student_id?: number;
   house_no?: number;

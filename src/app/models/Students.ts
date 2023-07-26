@@ -1,5 +1,7 @@
-class Students {
-  id?: number;
+import { Address } from './Address';
+import { Contacts } from './Contacts';
+
+export class Students {
   lrn: string;
   email?: string;
   profile?: string;
@@ -10,13 +12,11 @@ class Students {
   birth_date?: Date;
   gender?: number;
   nationality?: string;
-  created_at?: Date;
-  password: string;
+  addresses: Address[] = [];
+  contacts: Contacts[] = [];
 
   constructor(
     lrn: string,
-    password: string,
-    id?: number,
     email?: string,
     profile?: string,
     first_name?: string,
@@ -26,9 +26,9 @@ class Students {
     birth_date?: Date,
     gender?: number,
     nationality?: string,
-    created_at?: Date
+    addresses: Address[] = [],
+    contacts: Contacts[] = []
   ) {
-    this.id = id;
     this.lrn = lrn;
     this.email = email;
     this.profile = profile;
@@ -39,7 +39,7 @@ class Students {
     this.birth_date = birth_date;
     this.gender = gender;
     this.nationality = nationality;
-    this.created_at = created_at;
-    this.password = password;
+    this.addresses = addresses;
+    this.contacts = contacts;
   }
 }

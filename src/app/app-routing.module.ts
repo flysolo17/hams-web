@@ -22,7 +22,7 @@ const routes: Routes = [
         path: 'enrollment',
         children: [
           { path: '', component: EnrollmentComponent },
-          { path: 'view-enrollment/:id', component: ViewEnrollmentComponent },
+          { path: 'view-enrollment', component: ViewEnrollmentComponent },
         ],
       },
       { path: 'settings', component: SettingsComponent },

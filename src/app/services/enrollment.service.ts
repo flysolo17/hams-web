@@ -4,6 +4,7 @@ import { ResponseData } from '../domain/ResponseData';
 import { delay } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Enrollments } from '../models/Enrollments';
+import { Students } from '../models/Students';
 
 @Injectable({
   providedIn: 'root',
@@ -31,5 +32,17 @@ export class EnrollmentService {
         Authorization: 'Bearer ' + this.token,
       },
     });
+  }
+  getLearnerInfo(id: number) {
+    return this.http
+      .get<Students>(this.url + '/learner-info', {
+        params: {
+          student_id: id,
+        },
+        headers: {
+          Authorization: 'Bearer ' + this.token,
+        },
+      })
+      .pipe(delay(1000));
   }
 }

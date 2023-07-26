@@ -18,10 +18,10 @@
               </p>
               <div class="row">
                 <div class="col-sm-3">
-                  <p class="mb-0">Full Name</p>
+                  <p class="mb-0">First name</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">Juan</p>
+                  <p class="text-muted mb-0">{{ student?.first_name }}</p>
                 </div>
               </div>
               <hr />
@@ -30,7 +30,7 @@
                   <p class="mb-0">Middle name</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">Vega</p>
+                  <p class="text-muted mb-0">{{ student?.middle_name }}</p>
                 </div>
               </div>
               <hr />
@@ -39,7 +39,7 @@
                   <p class="mb-0">Last name</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">Dela Cruz</p>
+                  <p class="text-muted mb-0">{{ student?.last_name }}</p>
                 </div>
               </div>
               <hr />
@@ -48,7 +48,7 @@
                   <p class="mb-0">Extension Name</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">Sr.</p>
+                  <p class="text-muted mb-0">{{ student?.extension_name }}</p>
                 </div>
               </div>
               <hr />
@@ -57,7 +57,7 @@
                   <p class="mb-0">Gender</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">Male</p>
+                  <p class="text-muted mb-0">{{ student?.gender }}</p>
                 </div>
               </div>
               <hr />
@@ -66,7 +66,7 @@
                   <p class="mb-0">Birthday</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">July 3, 2000</p>
+                  <p class="text-muted mb-0">{{ student?.birth_date }}</p>
                 </div>
               </div>
               <hr />
@@ -75,7 +75,9 @@
                   <p class="mb-0">Age</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{ computeAge("2000-08-17") }}</p>
+                  <p class="text-muted mb-0">
+                    {{ computeAge(student?.birth_date!.toString()) }}
+                  </p>
                 </div>
               </div>
               <hr />
@@ -84,7 +86,7 @@
                   <p class="mb-0">Nationality</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">Filipino</p>
+                  <p class="text-muted mb-0">{{ student?.nationality }}</p>
                 </div>
               </div>
               <hr />
@@ -93,7 +95,7 @@
                   <p class="mb-0">Email</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">sample@gmail.com</p>
+                  <p class="text-muted mb-0">{{ student?.email }}</p>
                 </div>
               </div>
             </div>
@@ -147,7 +149,9 @@
             <div class="box">
               <div class="d-flex">
                 <img
-                  src="../../assets/images/employee.jpg"
+                  [src]="[
+                    student?.profile ?? '../../assets/images/employee.jpg'
+                  ]"
                   class="rounded-image"
                   alt="Profile Image"
                   width="100px"
@@ -155,8 +159,11 @@
                   style="border-radius: 50%"
                 />
                 <div class="p-3">
-                  <h5>Juan Dela Cruz</h5>
-                  <p class="h6 text-muted">03161704870</p>
+                  <h5>
+                    {{ student?.first_name }} {{ student?.middle_name }}
+                    {{ student?.last_name }}
+                  </h5>
+                  <p class="h6 text-muted">{{ student?.lrn }}</p>
                 </div>
               </div>
             </div>
@@ -177,7 +184,20 @@
                   <p class="mb-0">Grade Level</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">School Year</p>
+                  <p class="text-muted mb-0">
+                    {{ enrollmentData?.grade_level ?? "NA" }}
+                  </p>
+                </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">School Year</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">
+                    {{ enrollmentData?.school_year ?? "NA" }}
+                  </p>
                 </div>
               </div>
               <hr />
@@ -186,7 +206,10 @@
                   <p class="mb-0">Track - Strand</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">Vega</p>
+                  <p class="text-muted mb-0">
+                    {{ enrollmentData?.track ?? "NA" }} -
+                    {{ enrollmentData?.strand ?? "NA" }}
+                  </p>
                 </div>
               </div>
               <hr />
@@ -195,7 +218,9 @@
                   <p class="mb-0">Sem</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">1</p>
+                  <p class="text-muted mb-0">
+                    {{ enrollmentData?.semester ?? "NA" }}
+                  </p>
                 </div>
               </div>
               <hr />
@@ -204,7 +229,9 @@
                   <p class="mb-0">Date</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">July 10 2023 at 10pm</p>
+                  <p class="text-muted mb-0">
+                    {{ enrollmentData?.enrollment_date }}
+                  </p>
                 </div>
               </div>
               <div class="row">
@@ -266,3 +293,4 @@
     </div>
   </div>
 </ng-template>
+<app-toast [toast]="toast"></app-toast>

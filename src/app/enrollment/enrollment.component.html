@@ -45,8 +45,8 @@
           <table class="table table-hover table-borderless">
             <thead>
               <tr>
-                <th scope="col">Student ID</th>
                 <th scope="col">Grade Level</th>
+                <th scope="col">Subjects</th>
                 <th scope="col">Track</th>
                 <th scope="col">Strand</th>
                 <th scope="col">Sem</th>
@@ -56,8 +56,10 @@
             </thead>
             <tbody *ngFor="let enrollment of getEnrollmentByStatus(0)">
               <tr>
-                <th scope="row">{{ enrollment.student_id }}</th>
-                <td>{{ enrollment.grade_level }}</td>
+                <th>{{ enrollment.grade_level }}</th>
+                <td scope="row">
+                  {{ enrollment.enrolled_subjects?.length ?? 0 }}
+                </td>
                 <td>{{ enrollment.track ?? "none" }}</td>
                 <td>{{ enrollment.strand ?? "none" }}</td>
                 <td>{{ enrollment.semester ?? "none" }}</td>
@@ -67,7 +69,7 @@
                 <td>
                   <button
                     class="btn btn-success"
-                    [routerLink]="['view-enrollment', enrollment.id]"
+                    (click)="navigateToViewMore(enrollment)"
                   >
                     View More
                   </button>
@@ -85,3 +87,5 @@
     </div>
   </div>
 </ng-template>
+
+<app-toast [toast]="toast"></app-toast>

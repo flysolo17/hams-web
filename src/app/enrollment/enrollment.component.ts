@@ -7,6 +7,7 @@ import {
 } from '../reusable/toast/ToastModel';
 import { Enrollments } from '../models/Enrollments';
 import { formatDateTime } from '../utils/StringUtils';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-enrollment',
@@ -17,7 +18,10 @@ export class EnrollmentComponent implements OnInit {
   LOADING = true;
   toast: ToastModel | null = null;
   enrollments$: Enrollments[] = [];
-  constructor(private enrollmentService: EnrollmentService) {}
+  constructor(
+    private enrollmentService: EnrollmentService,
+    private router: Router
+  ) {}
   ngOnInit(): void {
     this.enrollmentService.getAllEnrollments().subscribe({
       next: (v: Enrollments[]) => {
@@ -42,5 +46,13 @@ export class EnrollmentComponent implements OnInit {
 
   convertDate(date: string): string {
     return formatDateTime(date);
+  }
+
+  navigateToViewMore(enrollment: Enrollments) {
+    const serializedObject = JSON.stringify(enrollment);
+    this.router.navigate([
+      'main/enrollment/view-enrollment',
+      { data: serializedObject },
+    ]);
   }
 }
