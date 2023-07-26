@@ -13,6 +13,7 @@ const {
   nullConversion,
 } = require("../utils/StringUtils");
 const { ResponseDataBuilder } = require("../models/ResponseData");
+const { getStudentInfo } = require("../services/student-service");
 const router = express.Router();
 
 router.get("/my-enrollments", authenticateToken, async (req, res) => {
@@ -94,37 +95,65 @@ router.patch("/cancel-enrollment", authenticateToken, async (req, res) => {
   }
 });
 router.get("/", authenticateToken, async (req, res) => {
-  const result = await getAllEnrollment();
-  res.status(200).send(result);
+  try {
+    const result = await getAllEnrollment();
+    result.map((data) => {
+      data.enrolled_subjects = data.enrolled_subjects
+        ? JSON.parse(data.enrolled_subjects)
+        : null;
+    });
+    res.status(200).send(result);
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    res.status(500).send({ error: "Internal Server Error" });
+  }
 });
 
-router.patch(
-  "/update-enrollment-status",
-
-  async (req, res) => {
-    const enrollment_id = req.query.id;
-    const status = req.query.status;
-    console.log(enrollment_id, status);
-    const result = await updateEnrollmentStatus(enrollment_id, status);
-    if (result) {
-      res
-        .status(200)
-        .send(
-          new ResponseDataBuilder()
-            .setSuccess(true)
-            .setMessage("Successfully Updated!")
-            .build()
-        );
+router.patch("/update-enrollment-status", async (req, res) => {
+  const enrollment_id = req.query.id;
+  const status = req.query.status;
+  console.log(enrollment_id, status);
+  const result = await updateEnrollmentStatus(enrollment_id, status);
+  if (result) {
+    res
+      .status(200)
+      .send(
+        new ResponseDataBuilder()
+          .setSuccess(true)
+          .setMessage("Successfully Updated!")
+          .build()
+      );
+  } else {
+    req
+      .status(500)
+      .send(
+        new ResponseDataBuilder()
+          .setSuccess(false)
+          .setMessage("Failed to cancel!")
+          .build()
+      );
+  }
+});
+router.get("/learner-info", authenticateToken, async (req, res) => {
+  const id = req.query.student_id;
+  if (id !== null || id !== undefined) {
+    const result = await getStudentInfo(id);
+    if (result !== null) {
+      if (result.length !== 0 && result[0].birth_date != null) {
+        result[0].birth_date = convertJSDateToSqlDate(result[0].birth_date);
+      }
+      const data = result[0];
+      data["contacts"] = data.contacts ? JSON.parse(data["contacts"]) : null;
+      data["addresses"] = data.addresses ? JSON.parse(data["addresses"]) : null;
+      res.status(200).json(data);
     } else {
-      req
-        .status(500)
-        .send(
-          new ResponseDataBuilder()
-            .setSuccess(false)
-            .setMessage("Failed to cancel!")
-            .build()
-        );
+      res.status(404).json({
+        success: true,
+        error: "Not Found",
+        message: "Student not found",
+        data: null,
+      });
     }
   }
-);
+});
 module.exports = router;

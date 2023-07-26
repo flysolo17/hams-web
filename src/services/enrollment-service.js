@@ -84,7 +84,40 @@ async function updateEnrollmentStatus(enrollment_id, status) {
 
 async function getAllEnrollment() {
   try {
-    const q = "SELECT * FROM enrollments";
+    const q = `
+    SELECT
+      e.id,
+      e.student_id,
+      e.grade_level,
+      e.school_year,
+      e.track,
+      e.strand,
+      e.semester,
+      e.enrollment_date,
+      e.updated_at,
+      e.enrollment_types,
+      e.status,
+  CASE
+    WHEN COUNT(es.id) > 0 THEN JSON_ARRAYAGG(
+      JSON_OBJECT(
+        'id', s.id,
+        'name', s.name,
+        'code', s.code,
+        'unit', s.unit,
+        'teacher_id', s.teacher_id,
+        'created_at', s.created_at,
+        'updated_at', s.updated_at
+      )
+    )
+    ELSE NULL
+  END AS enrolled_subjects
+FROM 
+  enrollments AS e
+LEFT JOIN enrolled_subjects AS es ON es.enrollment_id = e.id
+LEFT JOIN subjects AS s ON s.id = es.subject_id
+GROUP BY
+  e.id;
+    `;
     const result = await connection(q);
     return result;
   } catch (error) {
