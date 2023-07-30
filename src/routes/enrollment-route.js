@@ -5,13 +5,11 @@ const {
   getEnrollments,
   getAllEnrollment,
   updateEnrollmentStatus,
+  addSubjectToEnroll,
 } = require("../services/enrollment-service");
 const { authenticateToken } = require("../security/authentication");
-const { route } = require("./auth-routes");
-const {
-  convertJSDateToSqlDate,
-  nullConversion,
-} = require("../utils/StringUtils");
+
+const { convertJSDateToSqlDate } = require("../utils/StringUtils");
 const { ResponseDataBuilder } = require("../models/ResponseData");
 const { getStudentInfo } = require("../services/student-service");
 const router = express.Router();
@@ -156,4 +154,30 @@ router.get("/learner-info", authenticateToken, async (req, res) => {
     }
   }
 });
+
+router.post("/enroll-subject", authenticateToken, async (req, res) => {
+  const { enrollment_id, subject_id } = req.body;
+  const result = await addSubjectToEnroll(enrollment_id, subject_id);
+  if (result) {
+    res
+      .status(201)
+      .json(
+        new ResponseDataBuilder()
+          .setSuccess(true)
+          .setData(subject_id)
+          .setMessage("Successfully Added!")
+          .build()
+      );
+  } else {
+    res
+      .status(500)
+      .json(
+        new ResponseDataBuilder()
+          .setSuccess(false)
+          .setMessage("Failed!")
+          .build()
+      );
+  }
+});
+
 module.exports = router;

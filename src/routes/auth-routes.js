@@ -3,7 +3,10 @@ const {
   signup,
   signInWithEmailAndPassword,
   getAllTeachers,
-  addTeachers,
+
+  addUser,
+  getAllUser,
+  getUserById,
 } = require("../services/auth-service");
 const { hashPassword, checkPassword } = require("../security/encryption");
 const { signUser, authenticateToken } = require("../security/authentication");
@@ -60,21 +63,23 @@ router.post("/login", async (req, res) => {
   }
 });
 router.post(
-  "/add-teachers",
+  "/add-user",
   authenticateToken,
   upload.single("profile"),
   async (req, res) => {
-    const { name, email, gender } = req.body;
+    const { name, email, gender, type } = req.body;
+    console.log(req.body);
     if (!req.file) {
       profile = null;
     } else {
       profile = req.file.filename;
     }
-    const result = await addTeachers(
+    const result = await addUser(
       name,
       req.file.filename.toString(),
       email,
-      +gender
+      +gender,
+      +type
     );
     if (result.success) {
       res.status(201).json(result);
@@ -87,5 +92,19 @@ router.post(
 router.get("/teachers", authenticateToken, async (req, res) => {
   const result = await getAllTeachers();
   res.status(200).send(result);
+});
+
+router.get("/users", authenticateToken, async (req, res) => {
+  const result = await getAllUser();
+  res.status(200).send(result);
+});
+
+router.get("/get-user", authenticateToken, async (req, res) => {
+  const result = await getUserById(req.user.id);
+  if (result != null) {
+    res.status(200).send(result);
+  } else {
+    res.status(404).send({ message: "User not found!" });
+  }
 });
 module.exports = router;

@@ -8,7 +8,6 @@ const {
   deleteSubject,
   updateSubject,
   getSubjectByID,
-  insertAndRetrieveData,
 } = require("../services/subject-service");
 
 router.post("/insert", authenticateToken, async (req, res) => {
@@ -53,9 +52,9 @@ router.patch("/update", authenticateToken, async (req, res) => {
   }
 });
 
-router.post("/insertAndRetrieve", authenticateToken, async (req, res) => {
-  const { name, code, unit, teacher_id } = req.body;
-  const result = await insertAndRetrieveData(name, code, unit, teacher_id);
+router.get("/get-subject", authenticateToken, async (req, res) => {
+  const id = req.query.id;
+  const result = await getSubjectByID(id);
 
   res.status(201).send(result);
 });

@@ -16,7 +16,7 @@ async function signup(name, profile, type, email, password, gender) {
     builder
       .setSuccess(true)
       .setMessage("Successfully Added")
-      .data(result["insertId"])
+      .setData(result["insertId"])
       .build();
     return builder;
   } catch (err) {
@@ -82,15 +82,43 @@ async function getAllTeachers() {
       .build();
   }
 }
-async function addTeachers(name, profile, email, gender) {
+
+async function getAllUser() {
+  try {
+    const query =
+      `SELECT u.id ,u.name,u.profile,t.name as type,g.name as gender,u.email,u.password ` +
+      `FROM ` +
+      `users AS u ` +
+      `JOIN user_type AS t ON ` +
+      `t.id = u.type ` +
+      `JOIN gender AS g ON ` +
+      `u.gender = g.id ` +
+      `ORDER BY u.name`;
+    const result = await connection(query);
+    return new ResponseDataBuilder()
+      .setSuccess(true)
+      .setData(result)
+      .setMessage("Successfully fetched!")
+      .build();
+  } catch (err) {
+    console.log(err);
+    return new ResponseDataBuilder()
+      .setSuccess(false)
+      .setMessage(err["sqlMessage"])
+      .setError(err["code"])
+      .build();
+  }
+}
+async function addUser(name, profile, email, gender, type) {
   const hash = await hashPassword("12345");
   const id = uuidv4();
+
   try {
     const query =
       `INSERT ` +
       `users ` +
       `VALUES ` +
-      `('${id}','${name}' , '${profile}',${2},'${email}','${hash}','${gender}')`;
+      `('${id}','${name}' , '${profile}',${type},'${email}','${hash}','${gender}')`;
 
     const result = await connection(query);
     console.log(result);
@@ -109,9 +137,28 @@ async function addTeachers(name, profile, email, gender) {
   }
 }
 
+async function getUserById(id) {
+  try {
+    const query =
+      `SELECT u.id ,u.name,u.profile,u.type,u.gender,u.email,u.password ` +
+      `FROM ` +
+      `users AS u ` +
+      `WHERE u.id = '${id}'`;
+    const result = await connection(query);
+    if (result.length !== 0) {
+      return result[0];
+    } else {
+      return null;
+    }
+  } catch (err) {
+    return null;
+  }
+}
 module.exports = {
   signup,
   signInWithEmailAndPassword,
   getAllTeachers,
-  addTeachers,
+  addUser,
+  getAllUser,
+  getUserById,
 };

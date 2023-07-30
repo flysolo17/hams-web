@@ -25,6 +25,10 @@ app.use("/test", testRoute);
 
 const enrollment = require("./routes/enrollment-route");
 app.use("/enrollment", enrollment);
+
+const emailRoute = require("./routes/email-routed");
+app.use("/email", emailRoute);
+
 app.listen(port, () => {
   console.log("listening to port: ", port);
 });

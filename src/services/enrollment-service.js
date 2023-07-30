@@ -71,8 +71,9 @@ async function updateEnrollmentStatus(enrollment_id, status) {
   try {
     const q = `
         UPDATE enrollments
-            SET status = "${status}"
-    WHERE id = ${enrollment_id};
+            SET status = "${status}",
+            updated_at = '${getCurrentTimestamp()}',    
+        WHERE id = ${enrollment_id};
     `;
     await connection(q);
     return true;
@@ -124,6 +125,18 @@ GROUP BY
     return [];
   }
 }
+async function addSubjectToEnroll(enrollment_id, subject_id) {
+  try {
+    const q = `
+    INSERT INTO enrolled_subjects(enrollment_id,subject_id)
+    VALUES(${enrollment_id},${subject_id})
+  `;
+    await connection(q);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
 
 module.exports = {
   getEnrollments,
@@ -131,4 +144,5 @@ module.exports = {
   cancelEnrollment,
   getAllEnrollment,
   updateEnrollmentStatus,
+  addSubjectToEnroll,
 };

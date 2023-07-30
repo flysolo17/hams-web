@@ -36,10 +36,15 @@ function nullOrInt(data) {
 const jsDate = "2023-07-05T12:34:56"; // Example JavaScript Date string
 const sqlDate = convertJSDateToSqlDate(jsDate);
 console.log(sqlDate); // Output: "2023-07-05"
-
+function isValidEmail(email) {
+  // Regular expression for email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
 module.exports = {
   getCurrentTimestamp,
   convertJSDateToSqlDate,
   nullConversion,
   nullOrInt,
+  isValidEmail,
 };
