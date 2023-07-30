@@ -7,13 +7,19 @@ import { SubjectComponent } from './subject/subject.component';
 import { EnrollmentComponent } from './enrollment/enrollment.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ViewEnrollmentComponent } from './view-enrollment/view-enrollment.component';
+import { TeacherComponent } from './teacher/teacher.component';
+import { AdministratorComponent } from './admin/administrator/administrator.component';
+import { SuperAdminMainComponent } from './super-admin/super-admin-main/super-admin-main.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'main', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  { path: 'main', component: MainComponent },
+  { path: 'teacher', component: TeacherComponent },
+  { path: 'admin', component: AdministratorComponent },
   {
-    path: 'main',
-    component: MainComponent,
+    path: 'super-admin',
+    component: SuperAdminMainComponent,
     children: [
       { path: '', component: HomeComponent },
       { path: 'home', component: HomeComponent },

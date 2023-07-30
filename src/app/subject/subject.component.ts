@@ -47,9 +47,10 @@ export class SubjectComponent implements OnInit, OnDestroy {
   selectedImage!: File;
 
   teachers$: Users[] = [];
+  ALL_TEACHERS: Users[] = [];
   subjects$: SubjectWithTeacher[] = [];
   ALL_SUBJECTS: SubjectWithTeacher[] = [];
-  ALL_TEACHERS: Users[] = [];
+
   private subjectSubscription: Subscription;
   private teacherSubscription: Subscription;
   constructor(
@@ -94,7 +95,7 @@ export class SubjectComponent implements OnInit, OnDestroy {
   createSubject() {
     this.subjectService.addSubject(this.subjectForm.value).subscribe({
       next: (v: any) => {
-        this.subjects$.push(v['data'][0] as SubjectWithTeacher);
+        this.getSubjectByID(v['data']);
         this.showToast(v['message'], ToastType.SUCCESS);
       },
       error: (e: any) => this.showToast(e, ToastType.ERROR),
@@ -107,33 +108,6 @@ export class SubjectComponent implements OnInit, OnDestroy {
 
   onFileSelected(event: any) {
     this.selectedImage = event.target.files[0];
-  }
-  createTeacher() {
-    console.log('Creating teacher!');
-    let name = this.teacherForm.controls.name.value ?? '<no-name>';
-    let email = this.teacherForm.controls.email.value ?? '<no-email>';
-    let gender = this.teacherForm.controls.gender.value ?? '0';
-    const formData = new FormData();
-    formData.append('profile', this.selectedImage);
-    formData.append('name', name);
-    formData.append('email', email);
-    formData.append('gender', gender);
-    this.authService.signup(formData).subscribe({
-      next: (v: any) => {
-        {
-          console.log(v);
-          this.showToast(v['message'], ToastType.SUCCESS);
-        }
-      },
-      error: (e) => {
-        console.log(e);
-        this.showToast(
-          e['status'] + ' : ' + e['error']['message'],
-          ToastType.ERROR
-        );
-      },
-      complete: () => this.teacherForm.reset(),
-    });
   }
 
   showToast(message: string, type: ToastType) {
@@ -152,7 +126,24 @@ export class SubjectComponent implements OnInit, OnDestroy {
     console.log(this.selectedID);
   }
   updateSubject(subject: SubjectWithTeacher) {}
-
+  getSubjectByID(id: string) {
+    this.subjectService.getSubjectByID(id).subscribe({
+      next: (v: SubjectWithTeacher[]) => {
+        {
+          v.map((data: SubjectWithTeacher) => {
+            this.subjects$.push(data);
+          });
+        }
+      },
+      error: (e) => {
+        this.showToast(
+          e['status'] + ' : ' + e['error']['message'],
+          ToastType.ERROR
+        );
+      },
+      complete: () => this.teacherForm.reset(),
+    });
+  }
   onSubjectSearch(e: string) {
     if (e !== '') {
       this.subjects$ = this.subjects$.filter((data) =>

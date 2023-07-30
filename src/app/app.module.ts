@@ -16,6 +16,11 @@ import { TOKEN_KEY } from './utils/StringUtils';
 import { SettingsComponent } from './settings/settings.component';
 import { EnrollmentComponent } from './enrollment/enrollment.component';
 import { ViewEnrollmentComponent } from './view-enrollment/view-enrollment.component';
+import { SubjectCanvasComponent } from './reusable/subject-canvas/subject-canvas.component';
+import { EmailFormComponent } from './reusable/email-form/email-form.component';
+import { AdministratorComponent } from './admin/administrator/administrator.component';
+import { TeacherComponent } from './teacher/teacher.component';
+import { SuperAdminMainComponent } from './super-admin/super-admin-main/super-admin-main.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +33,11 @@ import { ViewEnrollmentComponent } from './view-enrollment/view-enrollment.compo
     SettingsComponent,
     EnrollmentComponent,
     ViewEnrollmentComponent,
+    SubjectCanvasComponent,
+    EmailFormComponent,
+    AdministratorComponent,
+    TeacherComponent,
+    SuperAdminMainComponent,
   ],
   imports: [
     BrowserModule,

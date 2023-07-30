@@ -21,7 +21,7 @@ export class AuthService {
   }
   signup(data: FormData) {
     return this.http
-      .post<ResponseData>(this.url + 'add-teachers', data, {
+      .post<ResponseData>(this.url + 'add-user', data, {
         headers: {
           Authorization: 'Bearer ' + this.token,
         },
@@ -33,6 +33,26 @@ export class AuthService {
       .get<ResponseData>(this.url + 'teachers', {
         headers: {
           Authorization: 'Bearer ' + this.token,
+        },
+      })
+      .pipe(delay(1000));
+  }
+
+  getAllUsers() {
+    return this.http
+      .get<ResponseData>(this.url + 'users', {
+        headers: {
+          Authorization: 'Bearer ' + this.token,
+        },
+      })
+      .pipe(delay(1000));
+  }
+
+  getUserByID(token: string) {
+    return this.http
+      .get<Users>(this.url + 'get-user', {
+        headers: {
+          Authorization: 'Bearer ' + token,
         },
       })
       .pipe(delay(1000));

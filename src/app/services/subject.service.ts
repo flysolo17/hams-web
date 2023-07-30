@@ -35,4 +35,12 @@ export class SubjectService {
       })
       .pipe(delay(1000));
   }
+  getSubjectByID(id: string) {
+    const param = `${this.url}/get-subject?id=${id}`;
+    return this.http.get<SubjectWithTeacher[]>(param, {
+      headers: {
+        Authorization: 'Bearer ' + this.token,
+      },
+    });
+  }
 }

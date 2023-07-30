@@ -45,4 +45,15 @@ export class EnrollmentService {
       })
       .pipe(delay(1000));
   }
+
+  addSubjectToEnroll(enrollment_id: number, subject_id: number) {
+    const body = { enrollment_id: enrollment_id, subject_id: subject_id };
+    return this.http
+      .post<ResponseData>(this.url + '/enroll-subject', body, {
+        headers: {
+          Authorization: 'Bearer ' + this.token,
+        },
+      })
+      .pipe(delay(1000));
+  }
 }

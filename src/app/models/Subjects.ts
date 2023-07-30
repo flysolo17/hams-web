@@ -1,8 +1,7 @@
 export interface Subjects {
-  id: string;
+  id: number;
   name: string;
   code: string;
-  units: number;
-  teacherID: string;
-  createdAt: Date;
+  unit: number;
+  teacher_id: string;
 }

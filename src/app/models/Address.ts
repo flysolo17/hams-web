@@ -1,3 +1,5 @@
+import { AddressType } from './AddressType';
+
 export class Address {
   id?: number;
   student_id?: number;
@@ -8,7 +10,7 @@ export class Address {
   province?: string;
   country?: string;
   zip_code?: string;
-  type?: number;
+  type?: AddressType;
 
   constructor(
     student_id?: number,
@@ -19,7 +21,7 @@ export class Address {
     province?: string,
     country?: string,
     zip_code?: string,
-    type?: number,
+    type?: AddressType,
     id?: number
   ) {
     this.id = id;

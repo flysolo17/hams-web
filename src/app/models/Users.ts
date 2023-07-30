@@ -1,3 +1,4 @@
+import { Gender } from './Gender';
 import { UserType } from './UserType';
 
 export interface Users {
@@ -6,5 +7,6 @@ export interface Users {
   profile?: string;
   type: UserType;
   email: string;
+  gender: Gender;
   password: string;
 }

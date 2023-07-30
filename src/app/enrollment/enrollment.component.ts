@@ -25,7 +25,6 @@ export class EnrollmentComponent implements OnInit {
   ngOnInit(): void {
     this.enrollmentService.getAllEnrollments().subscribe({
       next: (v: Enrollments[]) => {
-        this.showToast('Successfully Fetched!', ToastType.SUCCESS);
         this.enrollments$ = v;
       },
       error: (e: any) => this.showToast(e.message, ToastType.ERROR),

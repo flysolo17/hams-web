@@ -1,100 +1,204 @@
-<!-- <div class="collapse mt-3" id="collapseExample">
-  <div class="card card-body">
-    <div class="d-flex align-items-end gap-3 mb-3">
-      <form [formGroup]="teacherForm" (submit)="createTeacher()">
-        <h5 class="text-primary mb-3">Create Teacher</h5>
-        <div class="form-floating mb-3">
-          <input
-            type="text"
-            class="form-control"
-            formControlName="name"
-            id="teacher"
-            #teacherName
-            placeholder="Fullname"
-            required
-            [ngClass]="{
-              'is-invalid':
-                'submitted' &&
-                teacherForm.controls.name.errors &&
-                teacherForm.controls.name.touched
-            }"
-          />
-          <label for="teacher">Name</label>
-          <div class="invalid-feedback">Please add fullname</div>
-        </div>
-
-        <div class="form-floating mb-3">
-          <select
-            class="form-select"
-            id="floatingSelect"
-            aria-label="Floating label select example"
-            formControlName="gender"
-            [ngClass]="{
-              'is-invalid':
-                'submitted' &&
-                teacherForm.controls.gender.errors &&
-                teacherForm.controls.gender.touched
-            }"
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <div class="box">
+        <span class="text-primary">User Management</span>
+        <div class="d-flex gap-2 mb-3 mt-3 align-items-center">
+          <div class="input-group">
+            <input
+              class="form-control bg-light"
+              placeholder="Seach teacher here!"
+              #teacherSearchbar
+              (keyup)="onTeacherSearch(teacherSearchbar.value)"
+            />
+          </div>
+          <button
+            class="btn btn-success"
+            data-bs-toggle="collapse"
+            href="#collapseExample"
+            role="button"
+            aria-expanded="false"
+            aria-controls="collapseExample"
           >
-            <option value="0">MALE</option>
-            <option value="1">FEMALE</option>
-          </select>
-          <label for="floatingSelect">Gender</label>
-          <div class="invalid-feedback">Please Select gender</div>
-        </div>
-        <div class="form-floating mb-3">
-          <input
-            type="text"
-            class="form-control"
-            formControlName="email"
-            id="email"
-            #teacherEmail
-            placeholder="email"
-            required
-            [ngClass]="{
-              'is-invalid':
-                'submitted' &&
-                teacherForm.controls.email.errors &&
-                teacherForm.controls.email.touched
-            }"
-          />
-          <label for="email">email</label>
-          <div class="invalid-feedback">Please add email</div>
+            Create
+          </button>
         </div>
 
-        <div class="mb-3">
-          <input
-            type="file"
-            accept="image/*"
-            (change)="onFileSelected($event)"
-            class="form-control"
-            formControlName="profile"
-            aria-label="file example"
-            required
-            [ngClass]="{
-              'is-invalid':
-                'submitted' &&
-                teacherForm.controls.profile.errors &&
-                teacherForm.controls.profile.touched
-            }"
-          />
-          <div class="invalid-feedback">Please add image</div>
-        </div>
+        <div style="max-height: 90%; overflow-y: auto">
+          <div class="collapse mt-3" id="collapseExample">
+            <div class="card card-body">
+              <div class="d-flex align-items-end gap-3 mb-3">
+                <form
+                  [formGroup]="teacherForm"
+                  (submit)="createTeacher()"
+                  style="width: 100%"
+                >
+                  <h5 class="text-primary mb-3">Create User</h5>
+                  <div class="row">
+                    <div class="col-8">
+                      <div class="form-floating mb-3">
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="name"
+                          id="teacher"
+                          #teacherName
+                          placeholder="Fullname"
+                          required
+                          [ngClass]="{
+                            'is-invalid':
+                              'submitted' &&
+                              teacherForm.controls.name.errors &&
+                              teacherForm.controls.name.touched
+                          }"
+                        />
+                        <label for="teacher">Name</label>
+                        <div class="invalid-feedback">Please add fullname</div>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="form-floating mb-3">
+                        <select
+                          class="form-select"
+                          id="floatingSelect"
+                          aria-label="Floating label select example"
+                          formControlName="gender"
+                          [ngClass]="{
+                            'is-invalid':
+                              'submitted' &&
+                              teacherForm.controls.gender.errors &&
+                              teacherForm.controls.gender.touched
+                          }"
+                        >
+                          <option value="0">MALE</option>
+                          <option value="1">FEMALE</option>
+                        </select>
+                        <label for="floatingSelect">Gender</label>
+                        <div class="invalid-feedback">Please Select gender</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-8">
+                      <div class="form-floating mb-3">
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="email"
+                          id="email"
+                          #teacherEmail
+                          placeholder="email"
+                          required
+                          [ngClass]="{
+                            'is-invalid':
+                              'submitted' &&
+                              teacherForm.controls.email.errors &&
+                              teacherForm.controls.email.touched
+                          }"
+                        />
+                        <label for="email">email</label>
+                        <div class="invalid-feedback">Please add email</div>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="form-floating mb-3">
+                        <select
+                          class="form-select"
+                          id="floatingSelect"
+                          aria-label="Floating label select example"
+                          formControlName="type"
+                          [ngClass]="{
+                            'is-invalid':
+                              'submitted' &&
+                              teacherForm.controls.type.errors &&
+                              teacherForm.controls.type.touched
+                          }"
+                        >
+                          <option value="1">ADMIN</option>
+                          <option value="2">TEACHER</option>
+                        </select>
+                        <label for="floatingSelect">User type</label>
+                        <div class="invalid-feedback">
+                          Please Select user type
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-        <button
-          class="btn btn-success text-align-end"
-          type="submit"
-          [disabled]="teacherForm.invalid"
-          data-bs-toggle="collapse"
-          data-bs-target="#collapseExample"
-          aria-expanded="false"
-          aria-controls="collapseExample"
-        >
-          Save
-        </button>
-      </form>
+                  <div class="mb-3">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      (change)="onFileSelected($event)"
+                      class="form-control"
+                      formControlName="profile"
+                      aria-label="file example"
+                      required
+                      [ngClass]="{
+                        'is-invalid':
+                          'submitted' &&
+                          teacherForm.controls.profile.errors &&
+                          teacherForm.controls.profile.touched
+                      }"
+                    />
+                    <div class="invalid-feedback">Please add image</div>
+                  </div>
+
+                  <button
+                    class="btn btn-success text-align-end"
+                    type="submit"
+                    [disabled]="teacherForm.invalid"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseExample"
+                    aria-expanded="false"
+                    aria-controls="collapseExample"
+                  >
+                    Save
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <ul
+            class="list-group list-group-flush overflow-auto"
+            *ngFor="let teacher of teachers$"
+          >
+            <li class="list-group-flush">
+              <div class="d-flex">
+                <img
+                  *ngIf="teacher.profile; else placeholderImage"
+                  [src]="teacher.profile"
+                  alt="Profile Image"
+                  width="60px"
+                  height="60px"
+                  style="border-radius: 50%; border: 2px solid #eee"
+                />
+
+                <ng-template #placeholderImage>
+                  <img
+                    src="../../assets/images/employee.jpg"
+                    alt="Placeholder Image"
+                    width="60px"
+                    style="border-radius: 50%"
+                    height="60px"
+                  />
+                </ng-template>
+                <div class="ms-2" style="width: 100%">
+                  <h6>{{ teacher.name }}</h6>
+                  <p class="text-subtitle text-muted">{{ teacher.email }}</p>
+                  <hr />
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="box"><span class="text-primary">Other Settings</span></div>
     </div>
   </div>
-</div> -->
+</div>
 
-<h1>Hello</h1>
+<app-toast [toast]="toast"></app-toast>

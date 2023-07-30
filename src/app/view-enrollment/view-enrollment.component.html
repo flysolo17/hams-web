@@ -106,17 +106,33 @@
           <div class="col">
             <div class="box">
               <p class="mb-4">
-                <span class="text-primary font-italic me-1"
-                  >LEARNER ADDRESS</span
-                >
+                <span class="text-primary font-italic me-1">ADDRESSES</span>
               </p>
 
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item">An item</li>
-                <li class="list-group-item">A second item</li>
-                <li class="list-group-item">A third item</li>
-                <li class="list-group-item">A fourth item</li>
-                <li class="list-group-item">And a fifth one</li>
+              <ul
+                class="list-group list-group-flush"
+                *ngFor="let address of student?.addresses"
+              >
+                <li class="list-group-item">
+                  <div class="d-flex" style="width: 100%">
+                    <img
+                      src="../../assets/images/location.png"
+                      height="60px"
+                      width="50px"
+                    />
+                    <div class="flex-grow-1 p-2">
+                      <p class="h6">
+                        {{ address.house_no }} {{ address.street }}
+                        {{ address.barangay }} {{ address.municipality }}
+                        {{ address.province }}
+                      </p>
+
+                      <p class="text-muted">
+                        {{ getAddressType(address?.type!) }}
+                      </p>
+                    </div>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
@@ -131,12 +147,25 @@
                 >
               </p>
 
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item">An item</li>
-                <li class="list-group-item">A second item</li>
-                <li class="list-group-item">A third item</li>
-                <li class="list-group-item">A fourth item</li>
-                <li class="list-group-item">And a fifth one</li>
+              <ul
+                class="list-group list-group-flush"
+                *ngFor="let contact of student?.contacts"
+              >
+                <li class="list-group-item">
+                  <div>
+                    <div class="d-flex justify-content-between">
+                      <h6>
+                        {{ contact?.first_name }} {{ contact?.middle_name }}
+                        {{ contact?.last_name }}
+                      </h6>
+                      <span class="text-muted">{{
+                        getContactType(contact?.type!)
+                      }}</span>
+                    </div>
+
+                    <p class="text-danger">Phone #: {{ contact?.phone }}</p>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
@@ -238,7 +267,7 @@
                 <div class="col text-start">
                   <button
                     class="btn btn-danger"
-                    (click)="updateEnrollmentStatus(3)"
+                    (click)="updateEnrollmentStatus(3, student?.email ?? '')"
                   >
                     Decline
                   </button>
@@ -246,9 +275,9 @@
                 <div class="col text-end">
                   <button
                     class="btn btn-success"
-                    (click)="updateEnrollmentStatus(1)"
+                    (click)="updateEnrollmentStatus(1, student?.email ?? '')"
                   >
-                    Accept Enrollment
+                    Accept
                   </button>
                 </div>
               </div>
@@ -261,7 +290,13 @@
             <div class="box h-100">
               <div class="d-flex justify-content-between">
                 <span class="text-primary">ENROLLED SUBJECTS</span>
-                <button class="btn btn-outline-success">
+                <button
+                  class="btn btn-outline-success"
+                  type="button"
+                  data-bs-toggle="offcanvas"
+                  data-bs-target="#staticBackdrop"
+                  aria-controls="staticBackdrop"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
@@ -279,12 +314,21 @@
                   </svg>
                 </button>
               </div>
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item">An item</li>
-                <li class="list-group-item">A second item</li>
-                <li class="list-group-item">A third item</li>
-                <li class="list-group-item">A fourth item</li>
-                <li class="list-group-item">And a fifth one</li>
+              <ul
+                class="list-group list-group-flush"
+                *ngFor="let subjects of enrollmentData?.enrolled_subjects"
+              >
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-start"
+                >
+                  <div class="ms-2 me-auto">
+                    <div class="fw-bold">{{ subjects.name }}</div>
+                    unit : {{ subjects.unit }}
+                  </div>
+                  <span class="badge bg-primary rounded-pill">{{
+                    subjects.code
+                  }}</span>
+                </li>
               </ul>
             </div>
           </div>
@@ -294,3 +338,55 @@
   </div>
 </ng-template>
 <app-toast [toast]="toast"></app-toast>
+<!-- Subject canvas -->
+<div
+  class="offcanvas offcanvas-end"
+  data-bs-backdrop="static"
+  tabindex="-1"
+  id="staticBackdrop"
+  aria-labelledby="staticBackdropLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="staticBackdropLabel">Add Subject</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <ul
+      class="list-group list-group-flush list-hover"
+      *ngFor="
+        let subject of getEnrolledSubjects(
+          enrollmentData?.enrolled_subjects ?? []
+        )
+      "
+    >
+      <li
+        class="list-group-item d-flex justify-content-between align-items-start"
+        (click)="
+          addSubjectToEnroll(
+            subject.id,
+            subject.name,
+            subject.code,
+            subject.unit,
+            subject?.teacher_id!
+          )
+        "
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+      >
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">{{ subject.code }} -{{ subject.name }}</div>
+          {{ subject.teacher }}
+        </div>
+        <span class="badge bg-success rounded-pill">{{ subject.unit }}</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- Add the modal-dialog component -->
+<app-email-form [email]="email"></app-email-form>
