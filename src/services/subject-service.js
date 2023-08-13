@@ -2,12 +2,12 @@ const connection = require("../database/connection");
 const { ResponseDataBuilder } = require("../models/ResponseData");
 const { getCurrentTimestamp } = require("../utils/StringUtils");
 
-async function addSubject(name, code, unit, teacher_id) {
+async function addSubject(name, code, teacher_id) {
   try {
     const q =
       `INSERT INTO subjects ` +
       `VALUES ` +
-      `(NULL,'${name}','${code}',${unit},'${teacher_id}','${getCurrentTimestamp()}',NULL);`;
+      `(NULL,'${name}','${code}','${teacher_id}','${getCurrentTimestamp()}',NULL);`;
 
     const result = await connection(q);
     const build = new ResponseDataBuilder();
@@ -38,13 +38,12 @@ async function deleteSubject(id) {
   }
 }
 
-async function updateSubject(id, name, code, unit, teacher_id) {
+async function updateSubject(id, name, code, teacher_id) {
   try {
     const q =
       `UPDATE subjects SET ` +
       `name = '${name}', ` +
       `code = '${code}', ` +
-      `unit = ${unit}, ` +
       `teacher_id = '${teacher_id}', ` +
       `updated_at = '${getCurrentTimestamp()}' ` +
       `WHERE ` +
@@ -70,7 +69,6 @@ async function getAllSubjects() {
     s.id,
     s.name,
     s.code,
-    s.unit,
     s.created_at,
     s.updated_at,
     u.id AS teacher_id,
@@ -109,7 +107,6 @@ async function getSubjectByID(id) {
     s.id,
     s.name,
     s.code,
-    s.unit,
     s.created_at,
     s.updated_at,
     u.id AS teacher_id,

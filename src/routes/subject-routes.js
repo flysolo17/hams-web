@@ -11,8 +11,8 @@ const {
 } = require("../services/subject-service");
 
 router.post("/insert", authenticateToken, async (req, res) => {
-  const { name, code, unit, teacher_id } = req.body;
-  const result = await addSubject(name, code, unit, teacher_id);
+  const { name, code, teacher_id } = req.body;
+  const result = await addSubject(name, code, teacher_id);
   if (result.success) {
     res.status(201).send(result);
   } else {
@@ -55,7 +55,6 @@ router.patch("/update", authenticateToken, async (req, res) => {
 router.get("/get-subject", authenticateToken, async (req, res) => {
   const id = req.query.id;
   const result = await getSubjectByID(id);
-
   res.status(201).send(result);
 });
 module.exports = router;

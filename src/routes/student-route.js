@@ -92,9 +92,9 @@ router.get("/", authenticateToken, async (req, res) => {
       if (result.length !== 0 && result[0].birth_date != null) {
         result[0].birth_date = convertJSDateToSqlDate(result[0].birth_date);
       }
-      const data = result[0];
-      data["contacts"] = JSON.parse(data["contacts"]);
-      data["addresses"] = JSON.parse(data["addresses"]);
+        const data = result[0];
+        data["contacts"] = JSON.parse(data["contacts"]);
+        data["addresses"] = JSON.parse(data["addresses"]);
       res.status(200).json({
         success: true,
         message: "Successfully Fetched!",

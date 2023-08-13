@@ -27,6 +27,7 @@ const enrollment = require("./routes/enrollment-route");
 app.use("/enrollment", enrollment);
 
 const emailRoute = require("./routes/email-routed");
+const { getCurrentTimestamp } = require("./utils/StringUtils");
 app.use("/email", emailRoute);
 
 app.listen(port, () => {

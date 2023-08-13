@@ -6,6 +6,9 @@ const {
   getAllEnrollment,
   updateEnrollmentStatus,
   addSubjectToEnroll,
+  getCurrentEnrolled,
+  getAllEnrolledStudents,
+  getAllEnrollmentHistory,
 } = require("../services/enrollment-service");
 const { authenticateToken } = require("../security/authentication");
 
@@ -57,6 +60,7 @@ router.post(
           new ResponseDataBuilder()
             .setSuccess(true)
             .setMessage("succefully created!")
+            .build()
         );
     } else {
       res
@@ -65,6 +69,7 @@ router.post(
           new ResponseDataBuilder()
             .setSuccess(true)
             .setMessage("Failed to create Request!")
+            .build()
         );
     }
   }
@@ -180,4 +185,29 @@ router.post("/enroll-subject", authenticateToken, async (req, res) => {
   }
 });
 
+router.get("/current-enrolled", async (req, res) => {
+  const result = await getCurrentEnrolled();
+  res.status(200).send(result);
+});
+
+router.get("/all-enrolled", async (req, res) => {
+  const result = await getAllEnrolledStudents();
+  res.status(200).send(result);
+});
+
+router.get("/history", async (req, res) => {
+  const id = req.query.student_id;
+  try {
+    const result = await getAllEnrollmentHistory(id);
+    result.map((data) => {
+      data.enrolled_subjects = data.enrolled_subjects
+        ? JSON.parse(data.enrolled_subjects)
+        : null;
+    });
+    res.status(200).send(result);
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    res.status(500).send({ error: "Internal Server Error" });
+  }
+});
 module.exports = router;
