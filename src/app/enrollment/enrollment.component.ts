@@ -6,8 +6,9 @@ import {
   ToastType,
 } from '../reusable/toast/ToastModel';
 import { Enrollments } from '../models/Enrollments';
-import { formatDateTime } from '../utils/StringUtils';
+import { STORAGE, formatDateTime } from '../utils/StringUtils';
 import { Router } from '@angular/router';
+import { StudentWithEnrollment } from '../models/StudentWithEnrollment';
 
 @Component({
   selector: 'app-enrollment',
@@ -18,6 +19,7 @@ export class EnrollmentComponent implements OnInit {
   LOADING = true;
   toast: ToastModel | null = null;
   enrollments$: Enrollments[] = [];
+  recentEnrolled$: StudentWithEnrollment[] = [];
   constructor(
     private enrollmentService: EnrollmentService,
     private router: Router
@@ -30,6 +32,7 @@ export class EnrollmentComponent implements OnInit {
       error: (e: any) => this.showToast(e.message, ToastType.ERROR),
       complete: () => {
         this.LOADING = false;
+        this.getRecentEnrolled();
       },
     });
   }
@@ -48,9 +51,30 @@ export class EnrollmentComponent implements OnInit {
   }
 
   navigateToViewMore(enrollment: Enrollments) {
+    console.log(enrollment);
     const serializedObject = JSON.stringify(enrollment);
     this.router.navigate([
-      'main/enrollment/view-enrollment',
+      'super-admin/enrollment/view-enrollment',
+      { data: serializedObject },
+    ]);
+  }
+  getRecentEnrolled() {
+    this.enrollmentService.getCurrentEnrolled().subscribe({
+      next: (v: StudentWithEnrollment[]) => {
+        this.recentEnrolled$ = v;
+        this.recentEnrolled$.map((value) => {
+          if (value['profile'] != null)
+            value['profile'] = STORAGE + value['profile'];
+        });
+        console.log(v);
+      },
+      error: (e: any) => this.showToast(e.message, ToastType.ERROR),
+    });
+  }
+  navigateToRecords(enrollment: StudentWithEnrollment) {
+    const serializedObject = JSON.stringify(enrollment);
+    this.router.navigate([
+      'super-admin/enrollment/view-student-record',
       { data: serializedObject },
     ]);
   }

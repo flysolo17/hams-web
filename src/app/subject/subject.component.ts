@@ -28,7 +28,7 @@ export class SubjectComponent implements OnInit, OnDestroy {
   subjectForm = new FormGroup({
     name: new FormControl('', Validators.required),
     code: new FormControl('', Validators.required),
-    unit: new FormControl('', Validators.required),
+
     teacher_id: new FormControl('Select Teacher', Validators.required),
   });
   teacherForm = new FormGroup({
@@ -40,7 +40,6 @@ export class SubjectComponent implements OnInit, OnDestroy {
   editSubjectForm = new FormGroup({
     name: new FormControl('', Validators.required),
     code: new FormControl('', Validators.required),
-    unit: new FormControl(0, Validators.required),
     teacher_id: new FormControl('Select Teacher', Validators.required),
   });
   selectedID: number = -1;
@@ -52,7 +51,7 @@ export class SubjectComponent implements OnInit, OnDestroy {
   ALL_SUBJECTS: SubjectWithTeacher[] = [];
 
   private subjectSubscription: Subscription;
-  private teacherSubscription: Subscription;
+
   constructor(
     private authService: AuthService,
     private subjectService: SubjectService
@@ -64,7 +63,18 @@ export class SubjectComponent implements OnInit, OnDestroy {
       },
       error: (e: any) => this.showToast(e['statusText'], ToastType.ERROR),
     });
-    this.teacherSubscription = authService.getAllTeachers().subscribe({
+  }
+
+  ngOnDestroy(): void {
+    if (this.subjectSubscription) {
+      this.subjectSubscription.unsubscribe();
+    }
+  }
+  ngOnInit(): void {
+    this.createSubjectDialog = new window.bootstrap.Modal(
+      document.getElementById('createSubjectDialog')
+    );
+    this.authService.getAllTeachers().subscribe({
       next: (v: ResponseData) => {
         let data: any[] = v.data;
         data.map((value) => {
@@ -78,23 +88,10 @@ export class SubjectComponent implements OnInit, OnDestroy {
       error: (e: any) => this.showToast(e['statusText'], ToastType.ERROR),
     });
   }
-
-  ngOnDestroy(): void {
-    if (this.subjectSubscription) {
-      this.subjectSubscription.unsubscribe();
-    }
-    if (this.teacherSubscription) {
-      this.teacherSubscription.unsubscribe();
-    }
-  }
-  ngOnInit(): void {
-    this.createSubjectDialog = new window.bootstrap.Modal(
-      document.getElementById('createSubjectDialog')
-    );
-  }
   createSubject() {
     this.subjectService.addSubject(this.subjectForm.value).subscribe({
       next: (v: any) => {
+        console.log(v);
         this.getSubjectByID(v['data']);
         this.showToast(v['message'], ToastType.SUCCESS);
       },
@@ -130,6 +127,7 @@ export class SubjectComponent implements OnInit, OnDestroy {
     this.subjectService.getSubjectByID(id).subscribe({
       next: (v: SubjectWithTeacher[]) => {
         {
+          console.log(v);
           v.map((data: SubjectWithTeacher) => {
             this.subjects$.push(data);
           });

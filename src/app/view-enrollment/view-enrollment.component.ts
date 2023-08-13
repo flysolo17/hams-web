@@ -71,7 +71,7 @@ export class ViewEnrollmentComponent implements OnInit, OnDestroy {
           myObject['updated_at'],
           myObject['enrollment_types'],
           myObject['status'],
-          myObject['enrolled_subjects']
+          myObject['enrolled_subjects'] ?? []
         );
         console.log(this.enrollmentData);
         this.getLearnerInfo(myObject['student_id']);
@@ -115,7 +115,6 @@ export class ViewEnrollmentComponent implements OnInit, OnDestroy {
         v.profile = STORAGE + v.profile ?? null;
         console.log(v);
         this.student = v;
-        this.showToast('Success', ToastType.SUCCESS);
         this.LOADING = false;
       },
       error: (e: any) => {
@@ -171,7 +170,6 @@ export class ViewEnrollmentComponent implements OnInit, OnDestroy {
     id: number,
     name: string,
     code: string,
-    unit: number,
     techer_id: string
   ) {
     this.LOADING = true;
@@ -185,11 +183,10 @@ export class ViewEnrollmentComponent implements OnInit, OnDestroy {
                 id: id,
                 name: name,
                 code: code,
-                unit: unit,
                 teacher_id: techer_id,
               });
             }
-            this.showToast('Success', ToastType.SUCCESS);
+            this.showToast(v['message'], ToastType.SUCCESS);
             this.LOADING = false;
           },
           error: (e: any) => {

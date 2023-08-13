@@ -1,0 +1,59 @@
+<div class="container-fluid bg-light">
+  <div class="row" style="height: 100%; margin: 1rem">
+    <div
+      class="col col-12"
+      style="background-color: white; border-radius: 10px"
+    >
+      <div class="input-group">
+        <input
+          class="form-control bg-light"
+          placeholder="Seach subject here!"
+          #subjectSearchBar
+        />
+      </div>
+    </div>
+
+    <div class="col col-12" style="flex-grow: 1">
+      <div class="row row-cols-4">
+        <div class="col" *ngFor="let studentWithEnrollment of allEnrolled$">
+          <div
+            class="box d-flex flex-column justify-content-center align-items-center gap-3"
+            (click)="navigateToRecords(studentWithEnrollment)"
+          >
+            <img
+              *ngIf="studentWithEnrollment.profile; else placeholderImage"
+              [src]="studentWithEnrollment.profile"
+              alt="Profile Image"
+              width="100px"
+              height="100px"
+              style="border-radius: 50%; border: 2px solid #eee"
+            />
+
+            <ng-template #placeholderImage>
+              <img
+                src="../../assets/images/employee.jpg"
+                alt="Placeholder Image"
+                width="100px"
+                style="border-radius: 50%"
+                height="100px"
+              />
+            </ng-template>
+            <div class="d-flex flex-column align-items-center">
+              <h4>
+                {{ studentWithEnrollment.first_name }}
+                {{ studentWithEnrollment.middle_name }}
+                {{ studentWithEnrollment.last_name }}
+              </h4>
+              <p class="text-muted">{{ studentWithEnrollment.lrn }}</p>
+              <h5 class="text-primary">
+                Grade {{ studentWithEnrollment.grade_level }}
+              </h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-toast [toast]="toast"></app-toast>

@@ -82,6 +82,50 @@
       <div class="col col-4">
         <div class="box">
           <h6 class="text-primary">Recently Enrolled</h6>
+
+          <ul
+            class="list-group list-group-flush overflow-auto"
+            *ngFor="let student of recentEnrolled$"
+          >
+            <li class="list-group-flush">
+              <div class="d-flex">
+                <img
+                  *ngIf="student.profile; else placeholderImage"
+                  [src]="student.profile"
+                  alt="Profile Image"
+                  width="60px"
+                  height="60px"
+                  style="border-radius: 50%; border: 2px solid #eee"
+                />
+
+                <ng-template #placeholderImage>
+                  <img
+                    src="../../assets/images/employee.jpg"
+                    alt="Placeholder Image"
+                    width="60px"
+                    style="border-radius: 50%"
+                    height="60px"
+                  />
+                </ng-template>
+                <div class="ms-2" style="width: 100%">
+                  <h6>
+                    {{ student.first_name }} {{ student.middle_name }}
+                    {{ student.last_name }}
+                  </h6>
+                  <p class="text-subtitle text-muted">
+                    {{ student.student_id }}
+                  </p>
+                  <button
+                    class="btn btn-outline-success"
+                    (click)="navigateToRecords(student)"
+                  >
+                    View Info
+                  </button>
+                  <hr />
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>

@@ -10,6 +10,9 @@ import { ViewEnrollmentComponent } from './view-enrollment/view-enrollment.compo
 import { TeacherComponent } from './teacher/teacher.component';
 import { AdministratorComponent } from './admin/administrator/administrator.component';
 import { SuperAdminMainComponent } from './super-admin/super-admin-main/super-admin-main.component';
+import { GradesComponent } from './grades/grades.component';
+import { StudentRecordComponent } from './student-record/student-record.component';
+import { ViewStudentRecordComponent } from './view-student-record/view-student-record.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
@@ -23,14 +26,31 @@ const routes: Routes = [
     children: [
       { path: '', component: HomeComponent },
       { path: 'home', component: HomeComponent },
+      {
+        path: 'record',
+        children: [
+          { path: '', component: StudentRecordComponent },
+          {
+            path: 'view-student-record',
+            component: ViewStudentRecordComponent,
+          },
+        ],
+      },
       { path: 'subject', component: SubjectComponent },
+
       {
         path: 'enrollment',
         children: [
           { path: '', component: EnrollmentComponent },
           { path: 'view-enrollment', component: ViewEnrollmentComponent },
+          {
+            path: 'view-student-record',
+            component: ViewStudentRecordComponent,
+          },
         ],
       },
+      { path: 'grades', component: GradesComponent },
+
       { path: 'settings', component: SettingsComponent },
     ],
   },

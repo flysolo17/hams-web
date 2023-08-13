@@ -1,2 +1,15 @@
-<p>This is teacher page</p>
+<table style="width: 100%">
+  <thead>
+    <tr>
+      <th scope="col">task</th>
+      <th scope="col">completed</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let todo of todos">
+      <td>{{ todo.task }}</td>
+      <td>{{ todo.completed }}</td>
+    </tr>
+  </tbody>
+</table>
 <button class="btn btn-danger" (click)="logout()">Logout</button>

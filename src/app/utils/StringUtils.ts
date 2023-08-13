@@ -21,11 +21,13 @@ export function formatDateTime(dateTimeString: string): string {
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'short',
-    day: '2-digit',
-    hour: '2-digit',
+    day: 'numeric',
+    hour: 'numeric',
     minute: '2-digit',
     second: '2-digit',
     hour12: true,
+    timeZoneName: 'short',
+    timeZone: 'UTC', // Add this line to keep the date in UTC
   };
 
   return date.toLocaleString('en-US', options);
@@ -49,6 +51,21 @@ export function getAge(birthdate: string): number {
   ) {
     age--;
   }
-
   return age;
 }
+
+// export function formatDate(dateString: string) {
+//   const options: Intl.DateTimeFormatOptions = {
+//     year: 'numeric',
+//     month: 'short',
+//     day: 'numeric',
+//     hour: 'numeric',
+//     minute: '2-digit',
+//     second: '2-digit',
+//     hour12: true,
+//     timeZoneName: 'short',
+//   };
+
+//   const formattedDate = new Date(dateString).toLocaleString('en-US', options);
+//   return formattedDate;
+// }

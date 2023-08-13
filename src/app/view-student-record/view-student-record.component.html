@@ -1,0 +1,66 @@
+<div
+  *ngIf="LOADING; else main"
+  class="d-flex justify-content-center h-100 d-flex justify-content-center"
+>
+  <h5>Loading.....</h5>
+</div>
+<ng-template #main>
+  <div class="container-fluid bg-light d-flex flex-column">
+    <div class="row">
+      <div class="col col-12">
+        <div class="box">
+          <div class="d-flex gap-2">
+            <img
+              [src]="'../../assets/images/employee.jpg'"
+              alt="Placeholder Image"
+              width="120"
+              style="border-radius: 50%"
+              height="120"
+            />
+            <div class="p-2">
+              <h5>Juan Dela Cruz</h5>
+              <p class="text-primary">023312312</p>
+              <p>MALE</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row flex-grow-1">
+      <div class="col">
+        <div class="box">
+          <h5 class="text-primary">Enrollment History</h5>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">School Year</th>
+                <th scope="col">Grade</th>
+                <th scope="col">Track</th>
+                <th scope="col">Strand</th>
+                <th scope="col">Sem</th>
+                <th scope="col">Subjects</th>
+                <th scope="col">Enrollment Date</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody *ngFor="let enrollment of history$">
+              <tr>
+                <th scope="row">{{ enrollment.school_year }}</th>
+                <td>{{ enrollment.grade_level }}</td>
+                <td>{{ enrollment.track ?? "NA" }}</td>
+                <td>{{ enrollment.strand ?? "NA" }}</td>
+                <td>{{ enrollment.semester ?? "NA" }}</td>
+                <td>{{ enrollment.enrolled_subjects?.length ?? 0 }}</td>
+                <td>
+                  {{ formatDateString(enrollment.updated_at.toString()) }}
+                </td>
+                <td>{{ getEnrollmentStatus(enrollment.status) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<app-toast [toast]="toast"></app-toast>

@@ -162,7 +162,6 @@
                         getContactType(contact?.type!)
                       }}</span>
                     </div>
-
                     <p class="text-danger">Phone #: {{ contact?.phone }}</p>
                   </div>
                 </li>
@@ -323,7 +322,6 @@
                 >
                   <div class="ms-2 me-auto">
                     <div class="fw-bold">{{ subjects.name }}</div>
-                    unit : {{ subjects.unit }}
                   </div>
                   <span class="badge bg-primary rounded-pill">{{
                     subjects.code
@@ -371,7 +369,6 @@
             subject.id,
             subject.name,
             subject.code,
-            subject.unit,
             subject?.teacher_id!
           )
         "
@@ -382,7 +379,6 @@
           <div class="fw-bold">{{ subject.code }} -{{ subject.name }}</div>
           {{ subject.teacher }}
         </div>
-        <span class="badge bg-success rounded-pill">{{ subject.unit }}</span>
       </li>
     </ul>
   </div>

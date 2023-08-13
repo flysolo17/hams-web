@@ -21,6 +21,9 @@ import { EmailFormComponent } from './reusable/email-form/email-form.component';
 import { AdministratorComponent } from './admin/administrator/administrator.component';
 import { TeacherComponent } from './teacher/teacher.component';
 import { SuperAdminMainComponent } from './super-admin/super-admin-main/super-admin-main.component';
+import { StudentRecordComponent } from './student-record/student-record.component';
+import { GradesComponent } from './grades/grades.component';
+import { ViewStudentRecordComponent } from './view-student-record/view-student-record.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +41,9 @@ import { SuperAdminMainComponent } from './super-admin/super-admin-main/super-ad
     AdministratorComponent,
     TeacherComponent,
     SuperAdminMainComponent,
+    StudentRecordComponent,
+    GradesComponent,
+    ViewStudentRecordComponent,
   ],
   imports: [
     BrowserModule,

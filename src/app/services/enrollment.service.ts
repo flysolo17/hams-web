@@ -5,6 +5,7 @@ import { delay } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Enrollments } from '../models/Enrollments';
 import { Students } from '../models/Students';
+import { StudentWithEnrollment } from '../models/StudentWithEnrollment';
 
 @Injectable({
   providedIn: 'root',
@@ -50,6 +51,38 @@ export class EnrollmentService {
     const body = { enrollment_id: enrollment_id, subject_id: subject_id };
     return this.http
       .post<ResponseData>(this.url + '/enroll-subject', body, {
+        headers: {
+          Authorization: 'Bearer ' + this.token,
+        },
+      })
+      .pipe(delay(1000));
+  }
+
+  getCurrentEnrolled() {
+    return this.http
+      .get<StudentWithEnrollment[]>(this.url + 'current-enrolled', {
+        headers: {
+          Authorization: 'Bearer ' + this.token,
+        },
+      })
+      .pipe(delay(1000));
+  }
+
+  getAllEnrolled() {
+    return this.http
+      .get<StudentWithEnrollment[]>(this.url + 'all-enrolled', {
+        headers: {
+          Authorization: 'Bearer ' + this.token,
+        },
+      })
+      .pipe(delay(1000));
+  }
+
+  getEnrollmentHistory(student_id: number) {
+    const param = `${this.url}/history?student_id=${student_id}`;
+    console.log(param);
+    return this.http
+      .get<Enrollments[]>(param, {
         headers: {
           Authorization: 'Bearer ' + this.token,
         },
